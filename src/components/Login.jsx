@@ -1,8 +1,10 @@
+import axios from 'axios';
 import { useState } from 'react';
 import resmicLogo from '../assets/images/resmic_logo.png';
 import VerifyOtp from './VerifyOtp';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAddDetail } from '../hooks/useAddDetail';
 function Login() {
     const [nextPage, setNextPage] = useState(false);
     const [showOtpPage, setShowOtpPage] = useState(false);
@@ -13,16 +15,27 @@ function Login() {
         setNextPage(!nextPage);
     }
 
-    function submitEmail() {
-        toast.success("OTP Sent Successfully!", {
-            position: "top-center",
-            autoClose: 4000 
-          });
-        setTimeout(()=>{
+    async function submitEmail() {
+        try {
+            setIsValid(false);
+            const response = await useAddDetail('https://payments.resmic.com/api/v1/auth/login', {
+                    email: email
+            })
+            toast.success("OTP Sent Successfully!", {
+                position: "top-center",
+                autoClose: 4000 
+            });
             setShowOtpPage(!showOtpPage);
-        }, 5000);
+        } catch (error) {
+            toast.error(error || "Something went wrong!", {
+                position: "top-center",
+                autoClose: 4000
+            });
+        }
+        finally {
+            setIsValid(true);
+        }
     }
-
     // Email validation function
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -65,9 +78,7 @@ function Login() {
                                 <div className='relative w-[100%]'>
                                 <input
                                     type="email"
-                                    className={`w-[90%] px-10 py-2 my-3 outline-none border rounded-md ${
-                                    email && !isValid ? "border-red-500" : "border-gray-300"
-                                    } focus:border-primary`}
+                                    className={`w-[90%] px-10 py-2 my-3 outline-none border rounded-md focus:border-primary`}
                                     placeholder="Enter your email"
                                     value={email}
                                     onChange={handleChange}
@@ -75,6 +86,7 @@ function Login() {
                                     <div className='absolute top-5 left-8 md:left-10'><i className="bi bi-envelope"></i></div>
                                 </div>
                                 <button
+                                    type='button'
                                     className={`w-[90%] py-2 rounded-md text-white text-center flex items-center justify-center gap-3 my-3 text-md border-primary 
                                     ${isValid ? "bg-primary cursor-pointer" : "bg-gray-400 cursor-not-allowed"}`}
                                     onClick={submitEmail}

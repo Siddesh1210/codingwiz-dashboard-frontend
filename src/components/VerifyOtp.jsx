@@ -1,8 +1,13 @@
 import resmicLogo from '../assets/images/resmic_logo.png';
 import { useState, useRef } from "react";
+import { useAddDetail } from '../hooks/useAddDetail';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function VerifyOtp({userEmail, makeOtpPageFalse}) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Store OTP
     const inputRefs = useRef([]);
+    const [isOtpButtonDisabled, setIsOtpButtonDisabled] = useState(false);
+    const [showDot, setShowDot] = useState(false);
 
     // Handle Input Change
     const handleChange = (index, value) => {
@@ -26,6 +31,49 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
     };
 
     const isOtpValid = otp.every((digit) => digit !== "");
+
+    async function verifyOtp() {
+        try {
+            setIsOtpButtonDisabled(true);
+            const response = await useAddDetail('https://payments.resmic.com/api/v1/auth/verify', {
+                    email: userEmail,
+                    otp: otp.join("")
+            })
+            toast.success("OTP Verified Successfully!", {
+                position: "top-center",
+                autoClose: 4000 
+            });
+        } catch (error) {
+            toast.error(error || "Something went wrong!", {
+                position: "top-center",
+                autoClose: 4000
+            });
+        }
+        finally {
+            setIsOtpButtonDisabled(false);
+        }
+    }
+
+    async function resendOtp() {
+        try {
+            setShowDot(true);
+            const response = await useAddDetail('https://payments.resmic.com/api/v1/auth/resendotp', {
+                    email: userEmail,
+            })
+            toast.success("OTP Resent Successfully!", {
+                position: "top-center",
+                autoClose: 4000 
+            });
+        } catch (error) {
+            toast.error(error || "Something went wrong!", {
+                position: "top-center",
+                autoClose: 4000
+            });
+        }
+        finally {            
+            setShowDot(false);
+        }
+    }
 
 
     return(
@@ -56,12 +104,14 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
                             ))}
                         </div>
 
-                        <p className='my-3 text-md text-gray-500 tracking-wide'>Didn't receive a code?<span className='text-primary cursor-pointer tracking-normal'> Resend</span></p>
+                        <p className='my-3 text-md text-gray-500 tracking-wide'>Didn't receive a code? <span className='text-primary cursor-pointer tracking-normal underline' onClick={resendOtp}>Resend{showDot && "..."}
+                        </span></p>
 
                         <button
                             className={`w-[90%] py-2 rounded-md text-white text-center flex items-center justify-center gap-3 my-3 text-md border-primary
-                            ${isOtpValid ? "bg-primary cursor-pointer" : "bg-gray-400 cursor-not-allowed"}`}
-                            disabled={!isOtpValid}
+                            ${isOtpValid && !isOtpButtonDisabled ? "bg-primary cursor-pointer" : "bg-gray-400 cursor-not-allowed"}`}
+                            disabled={!isOtpValid || isOtpButtonDisabled} // Disable button if OTP is incomplete or API call is in progress
+                            onClick={verifyOtp}
                         >
                             Verify <i className="bi bi-arrow-right"></i>
                         </button>
@@ -70,6 +120,7 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
                     <p className='text-sm flex flex-wrap justify-center gap-1 items-center text-gray-500 my-3'> <i className="bi bi-c-circle"></i> Resmic 2025 <i className="bi bi-dot"></i> Contact <i className="bi bi-dot"></i> Privacy Policy <i className="bi bi-dot"></i> Terms of Conditions</p>
                 </div>
             </div>
+            <ToastContainer/>
         </>
     )
 }
