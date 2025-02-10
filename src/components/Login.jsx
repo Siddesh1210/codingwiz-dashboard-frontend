@@ -27,12 +27,14 @@ function Login() {
             });
             setShowOtpPage(!showOtpPage);
         } catch (error) {
+            console.log("Error is API: ", error);
             toast.error(error || "Something went wrong!", {
                 position: "top-center",
                 autoClose: 4000
             });
         }
         finally {
+            console.log("API Call was generated!!!");
             setIsValid(true);
         }
     }

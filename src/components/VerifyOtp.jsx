@@ -3,11 +3,13 @@ import { useState, useRef } from "react";
 import { useAddDetail } from '../hooks/useAddDetail';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from 'react-router-dom';
 function VerifyOtp({userEmail, makeOtpPageFalse}) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Store OTP
     const inputRefs = useRef([]);
     const [isOtpButtonDisabled, setIsOtpButtonDisabled] = useState(false);
     const [showDot, setShowDot] = useState(false);
+    const navigate = useNavigate();
 
     // Handle Input Change
     const handleChange = (index, value) => {
@@ -39,10 +41,12 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
                     email: userEmail,
                     otp: otp.join("")
             })
+            console.log("Response is : ", response);
             toast.success("OTP Verified Successfully!", {
                 position: "top-center",
                 autoClose: 4000 
             });
+            navigate("/");
         } catch (error) {
             toast.error(error || "Something went wrong!", {
                 position: "top-center",
