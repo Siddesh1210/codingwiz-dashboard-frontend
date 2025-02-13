@@ -1,19 +1,30 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import resmicLogo from '../assets/images/resmic_logo.png';
 import VerifyOtp from './VerifyOtp';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAddDetail } from '../hooks/useAddDetail';
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
+
 function Login() {
     const [nextPage, setNextPage] = useState(false);
     const [showOtpPage, setShowOtpPage] = useState(false);
     const [email, setEmail] = useState("");
     const [isValid, setIsValid] = useState(false);
+    const navigate = useNavigate();
+    const token = useSelector((state) => state.auth.token);
 
     function handlePage() {
         setNextPage(!nextPage);
     }
+
+    useEffect(()=>{
+        if(token) {
+            navigate("/");
+        }
+    },[])
 
     async function submitEmail() {
         try {

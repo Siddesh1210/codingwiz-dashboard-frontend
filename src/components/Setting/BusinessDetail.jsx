@@ -4,9 +4,11 @@ import { useUpdateDetail } from "../../hooks/useUpdateDetail";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function BusinessDetail() {
     const navigate = useNavigate();
+    const token = useSelector((state) => state.auth.token);
     // State for form fields
     const [formData, setFormData] = useState({
         businessName: "",
@@ -31,7 +33,7 @@ function BusinessDetail() {
 
         try {
                 const response = await useUpdateDetail('https://payments.resmic.com/api/v1/user/company', {
-                    user_id: "ZAJ5_Bg",
+                    user_id: token,
                     name: formData.businessName,
                     address: formData.businessAddress, 
                     email: formData.businessEmail,
@@ -78,7 +80,7 @@ function BusinessDetail() {
     },[]);
 
     async function getBusinessDetail() {
-        const response = await useFetchDetail('https://payments.resmic.com/api/v1/user/company?user_id=ZAJ5_Bg')
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/company?user_id=${token}`)
         console.log("Business Detail: ", response);
 
         // Set the state with API data

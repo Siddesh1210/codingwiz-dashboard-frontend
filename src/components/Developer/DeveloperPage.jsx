@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAddDetail } from "../../hooks/useAddDetail";
 import { useFetchDetail } from "../../hooks/useFetchDetail";
+import { useSelector } from "react-redux";
 
 function DeveloperPage({ apiData = [] }) {
   const [allData, setAllData] = useState(apiData);
@@ -10,24 +11,27 @@ function DeveloperPage({ apiData = [] }) {
   const [showModal, setShowModal] = useState(false);
   const [apiKey, setApiKey] = useState("");
   const [loading, setLoading] = useState(false);
+  const token = useSelector((state) => state.auth.token);
+
   
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(allData.length / itemsPerPage);
-  const currentItems = allData.length > 0 ? allData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
+//   const totalPages = Math.ceil(allData.length / itemsPerPage);
+//   const allData = allData.length > 0 ? allData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setCurrentPage(newPage);
-    }
-  };
+//   const handlePageChange = (newPage) => {
+//     if (newPage >= 1 && newPage <= totalPages) {
+//       setCurrentPage(newPage);
+//     }
+//   };
 
   useEffect(()=>{
-    setAllData(apiData)
+    getallData()
   }, [apiData])
 
   async function getallData() {
-    const response = await useFetchDetail('https://payments.resmic.com/api/v1/api-key?user_id=ZAJ5_Bg');
+    const response = await useFetchDetail(`https://payments.resmic.com/api/v1/api-key?user_id=${token}`);
     setAllData(response);
+    console.log("Response is : ", allData);
   }
 
   const handleGenerateKey = async () => {
@@ -81,19 +85,17 @@ function DeveloperPage({ apiData = [] }) {
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 ? (
-              currentItems.map((item, index) => (
-                <tr key={index} className="border-b">
-                  <td className="px-4 py-2">{item?.user_id || "N/A"}</td>
-                  <td className="px-4 py-2">{item?.api_key || "N/A"}</td>
-                  <td className="px-4 py-2">{item?.api_created_on ? new Date(item.api_created_on).toLocaleString() : "N/A"}</td>
-                  <td className="px-4 py-2">{item?.api_expiry ? new Date(item.api_expiry).toLocaleString() : "N/A"}</td>
+            {allData ? (
+                <tr className="border-b">
+                  <td className="px-4 py-2">{allData?.user_id || "N/A"}</td>
+                  <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
+                  <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
+                  <td className="px-4 py-2">{allData?.api_expiry ? new Date(allData.api_expiry).toLocaleString() : "N/A"}</td>
                   <td className="px-4 py-2 text-center">
                     <button className="text-blue-600 hover:text-blue-800">Delete</button>
                   </td>
                 </tr>
-              ))
-            ) : (
+              ) : (
               <tr>
                 <td colSpan={5} className="text-center py-2">No records found.</td>
               </tr>
@@ -103,7 +105,7 @@ function DeveloperPage({ apiData = [] }) {
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {/* {totalPages > 1 && (
         <div className="flex justify-center mt-4">
           <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50">
             Prev
@@ -113,10 +115,10 @@ function DeveloperPage({ apiData = [] }) {
             Next
           </button>
         </div>
-      )}
+      )} */}
 
       {/* No Keys Section */}
-      {currentItems.length == 0 && (
+      {allData && (
         <div className="h-[70vh] flex items-center justify-center">
           <div className="text-center">
             <p className="text-sm my-2 text-gray-600">No key generated</p>

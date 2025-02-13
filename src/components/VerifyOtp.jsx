@@ -4,12 +4,15 @@ import { useAddDetail } from '../hooks/useAddDetail';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/slices/authSlice';
 function VerifyOtp({userEmail, makeOtpPageFalse}) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]); // Store OTP
     const inputRefs = useRef([]);
     const [isOtpButtonDisabled, setIsOtpButtonDisabled] = useState(false);
     const [showDot, setShowDot] = useState(false);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Handle Input Change
     const handleChange = (index, value) => {
@@ -46,6 +49,7 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
                 position: "top-center",
                 autoClose: 4000 
             });
+            dispatch(login(response?.data?.user_id));
             navigate("/");
         } catch (error) {
             toast.error(error || "Something went wrong!", {

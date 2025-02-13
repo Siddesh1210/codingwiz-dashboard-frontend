@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { logout } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 function SideBar() {
     const location = useLocation();
+    const dispatch = useDispatch();
     return(
         <>
             <div className="w-[15%] min-h-screen lg:flex flex-col hidden border-r-2">
@@ -100,6 +103,13 @@ function SideBar() {
                             <i className="bi bi-gear"></i> Support
                         </div>
                     </a>
+
+                    <Link className="text-gray-800 cursor-pointer p-2 rounded w-full" onClick={() => dispatch(logout())} >
+                        <div
+                            className={`px-2 py-2 rounded-md mr-2 text-primary`}>
+                            <i className="bi bi-gear"></i> Logout
+                        </div>
+                    </Link>
                 </ul>
             </div>
         </>

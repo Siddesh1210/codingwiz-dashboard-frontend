@@ -4,9 +4,11 @@ import { useUpdateDetail } from "../../hooks/useUpdateDetail";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function AccountDetail() {
     const navigate = useNavigate();
+    const token = useSelector((state) => state.auth.token);
     // State for form fields
     const [formData, setFormData] = useState({
         firstName: "",
@@ -63,7 +65,7 @@ function AccountDetail() {
     },[]);
 
     async function getUserDetail() {
-        const response = await useFetchDetail('https://payments.resmic.com/api/v1/user?user_id=ZAJ5_Bg')
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user?user_id=${token}`)
         console.log("User Detail: ", response);
         const nameParts = response.name.split(" ");
         const firstName = nameParts[0] || "";

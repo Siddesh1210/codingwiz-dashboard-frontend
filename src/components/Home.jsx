@@ -5,11 +5,13 @@ import TransactionChart from "./Home/TransactionChart";
 import RecentPayment from "./Payment/RecentPayment";
 import { useFetchDetail } from "../hooks/useFetchDetail";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function Home() {
     const [homeTopCardData, setHomeTopCardData] = useState([]);
     const [transactionChartData, setTransactionChartData] = useState([]);
     const [paymentData, setPaymentData] = useState([]);
+    const token = useSelector((state) => state.auth.token);
 
     useEffect(()=>{
         getHomeTopCardData();
@@ -18,19 +20,19 @@ function Home() {
     },[])
 
     async function getHomeTopCardData() {
-        const response = await useFetchDetail('https://payments.resmic.com/api/v1/dashboard/stats?user_id=ZAJ5_Bg');
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/stats?user_id=${token}`);
         console.log(response[0]);
         setHomeTopCardData(response[0]);
     }
 
     async function getTransactionChartData() {
-        const response = await useFetchDetail('https://payments.resmic.com/api/v1/dashboard/graph?user_id=ZAJ5_Bg');
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/graph?user_id=${token}`);
         console.log(response);
         setTransactionChartData(response);
     }
 
     async function getRecentPayment() {
-        const response = await useFetchDetail('https://payments.resmic.com/api/v1/dashboard/recent-txs?user_id=ZAJ5_Bg');
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/recent-txs?user_id=${token}`);
         console.log(response);
         setPaymentData(response);
     }

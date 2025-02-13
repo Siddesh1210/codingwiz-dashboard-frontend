@@ -5,8 +5,7 @@ import SideBar from './components/SideBar';
 import Home from './components/Home';
 import Payment from './components/Payment';
 import Customer from './components/Customer';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+
 import ProtectedRoute from './components/ProtectedRoute';
 import PaymentLink from './components/PaymentLink';
 import Invoice from './components/Invoice';
@@ -14,19 +13,16 @@ import Coupon from './components/Coupon';
 import Developer from './components/Developer';
 import Subscription from './components/Subscription';
 import Setting from './components/Setting';
-import Support from './components/Support';
 import AccountDetail from './components/Setting/AccountDetail';
 import BusinessDetail from './components/Setting/BusinessDetail';
 const App = () => {
   return (
     <>
-        <Provider store={store}>
             <Navbar/>
             <div className='flex'>
                 <SideBar/>
                 <Outlet/>
             </div>
-        </Provider>
     </>
   )
 }

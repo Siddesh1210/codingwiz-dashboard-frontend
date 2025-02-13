@@ -63,17 +63,29 @@ const CustomerList = ({data}) => {
     // Search Query Filter
     if (searchQuery) {
       filtered = filtered?.filter((item) =>
-        item?.transaction_id?.toLowerCase()?.includes(searchQuery?.toLowerCase())
+        item?.from_wallet_address?.toLowerCase()?.includes(searchQuery?.toLowerCase())
       );
     }
 
     // Date Filters
     if (fromDate) {
-      filtered = filtered?.filter((item) => new Date(item?.created_at) >= new Date(fromDate));
+        let fromDateStart = new Date(fromDate);
+        fromDateStart.setHours(0, 0, 0, 0); // Start of the day
+    
+        filtered = filtered?.filter((item) => {
+            let itemDate = new Date(item?.last_transaction_date);
+            return itemDate >= fromDateStart;
+        });
     }
-
+    
     if (toDate) {
-      filtered = filtered?.filter((item) => new Date(item?.created_at) <= new Date(toDate));
+        let toDateEnd = new Date(toDate);
+        toDateEnd.setHours(23, 59, 59, 999); // End of the day
+    
+        filtered = filtered?.filter((item) => {
+            let itemDate = new Date(item?.last_transaction_date);
+            return itemDate <= toDateEnd;
+        });
     }
 
     setFilteredData(filtered);
@@ -96,8 +108,8 @@ const CustomerList = ({data}) => {
   const exportToExcel = () => {
     const ws = XLSX?.utils?.json_to_sheet(filteredData);
     const wb = XLSX?.utils?.book_new();
-    XLSX?.utils?.book_append_sheet(wb, ws, "Payments");
-    XLSX?.writeFile(wb, "payments.xlsx");
+    XLSX?.utils?.book_append_sheet(wb, ws, "Customers");
+    XLSX?.writeFile(wb, "customers.xlsx");
   };
 
   return (
@@ -109,14 +121,14 @@ const CustomerList = ({data}) => {
           <div className="relative">
             <input
                 type="text"
-                placeholder="Search by Transaction ID"
+                placeholder="Search by User"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm"
             />
-            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">Tnx ID</p>
+            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">User</p>
           </div>
-          <div className="relative">
+          {/* <div className="relative">
             <select
                 value={statusFilter}
                 onChange={handleFilterChange}
@@ -128,7 +140,7 @@ const CustomerList = ({data}) => {
                 <option value="failure">Failure</option>
             </select>
             <p className="absolute -top-3 left-1 bg-white px-2 text-primary">Status</p>
-          </div>
+          </div> */}
           <div className="relative">
                 <input
                     type="date"
@@ -173,10 +185,11 @@ const CustomerList = ({data}) => {
         <table className="min-w-full bg-white border border-gray-200 text-sm">
           <thead>
             <tr className="border-b bg-gray-100">
+              <th className="px-4 py-2 text-left">User</th>
               <th className="px-4 py-2 text-left">Total Transaction</th>
-              <th className="px-4 py-2 text-left">Total Amount</th>
-              <th className="px-4 py-2 text-left">From Wallet</th>
-              <th className="px-4 py-2 text-left">Last Transaction Date</th>
+              <th className="px-4 py-2 text-left">Total Spent</th>
+              <th className="px-4 py-2 text-left">First Payment</th>
+              <th className="px-4 py-2 text-left">Last Payment</th>
             </tr>
           </thead>
           <tbody>
@@ -184,9 +197,10 @@ const CustomerList = ({data}) => {
               currentItems?.length !== 0 ? (
                 currentItems?.map((item) => (
                   <tr key={item?.transaction_id} className="border-b">
+                    <td className="px-4 py-2">{item?.from_wallet_address}</td>
                     <td className="px-4 py-2">{item?.total_transactions}</td>
                     <td className="px-4 py-2">{item?.total_amount}</td>
-                    <td className="px-4 py-2">{item?.from_wallet_address}</td>
+                    <td className="px-4 py-2">{new Date(item?.first_transaction_date)?.toLocaleString()}</td>
                     <td className="px-4 py-2">{new Date(item?.last_transaction_date)?.toLocaleString()}</td>
                   </tr>
                 ))

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import resmicLogo from '../assets/images/resmic_logo.png';
+import { logout } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-
-
+  const dispatch = useDispatch();
   return (
-    <nav className="bg-white">
+    <nav className="bg-white sticky top-0 z-10">
       <div className="flex justify-between items-center p-4 shadow-md">
         {/* Left: Logo and Title */}
         <div className="flex items-center space-x-3">
@@ -52,6 +53,7 @@ function Navbar() {
           <Link onClick={() => setIsOpen(false)} to="/subscription" className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer ${ location.pathname === "/subscription" ? "bg-primary text-white" : "text-primary" }`}><i className="bi bi-gear"></i> &nbsp;Subscription</Link>
           <Link onClick={() => setIsOpen(false)} to="/setting" className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer ${ location.pathname === "/setting" || location.pathname === "/setting/account-detail" || location.pathname === "/support/business-detail" ? "bg-primary text-white" : "text-primary" }`}><i className="bi bi-gear"></i> &nbsp;Settings</Link>
           <a onClick={() => setIsOpen(false)} href= "mailto:support@resmic.com" className={`p-2 rounded text-xl cursor-pointer text-primary`}><i className="bi bi-gear"></i> &nbsp;Support</a>
+          <Link onClick={() => dispatch(logout())}  className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer text-primary`}><i className="bi bi-gear"></i> &nbsp;Logout</Link>
         </ul>
       </div>
     </nav>
