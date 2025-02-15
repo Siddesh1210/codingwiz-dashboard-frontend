@@ -54,25 +54,29 @@ const PaymentHistory = ({data}) => {
         <table className="min-w-full bg-white border border-gray-200 text-sm">
           <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2 text-left">Transaction ID</th>
-              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 text-left">Date</th>
               <th className="px-4 py-2 text-left">Amount</th>
-              <th className="px-4 py-2 text-left">From Wallet</th>
-              <th className="px-4 py-2 text-left">To Wallet</th>
-              <th className="px-4 py-2 text-left">Created At</th>
+              <th className="px-4 py-2 text-left">Tier</th>
+              <th className="px-4 py-2 text-left">Start Date</th>
+              <th className="px-4 py-2 text-left">End Date</th>
+              <th className="px-4 py-2 text-left">Method</th>
+              <th className="px-4 py-2 text-left">More</th>
             </tr>
           </thead>
           <tbody>
             {
                 currentItems?.length !== 0 ? (
                     currentItems?.map((item) => (
-                        <tr key={item?.transaction_id} className="border-b">
-                          <td className="px-4 py-2">{item?.transaction_id}</td>
-                          <td className="px-4 py-2">{item?.status}</td>
+                        <tr key={item?.created_at} className="border-b">
+                          <td className="px-4 py-2">{item?.created_at}</td>
                           <td className="px-4 py-2">{item?.amount}</td>
-                          <td className="px-4 py-2">{item?.from_wallet_address}</td>
-                          <td className="px-4 py-2">{item?.to_wallet_address}</td>
-                          <td className="px-4 py-2">{new Date(item?.created_at)?.toLocaleString()}</td>
+                          <td className="px-4 py-2">{item?.tier}</td>
+                          <td className="px-4 py-2">{new Date(item?.start_date)?.toLocaleString()}</td>
+                          <td className="px-4 py-2">{new Date(item?.end_date)?.toLocaleString()}</td>
+                          <td className="px-4 py-2">{item?.method || "N/A"}</td>
+                          <td className="px-4 py-2">{item?.more || "N/A"}</td>
+                          
+
                         </tr>
                       ))
                 ) : (

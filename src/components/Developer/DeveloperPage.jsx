@@ -40,7 +40,7 @@ function DeveloperPage({ apiData = [] }) {
     setLoading(true);
     try {
       const response = await useAddDetail('https://payments.resmic.com/api/v1/api-key', {
-            email: "heydivyapawar@gmail.com",
+            user_id: token,
             api_key: apiKey
         })
         console.log("Response is : ",response);
@@ -118,7 +118,7 @@ function DeveloperPage({ apiData = [] }) {
       )} */}
 
       {/* No Keys Section */}
-      {allData && (
+      {!allData && (
         <div className="h-[70vh] flex items-center justify-center">
           <div className="text-center">
             <p className="text-sm my-2 text-gray-600">No key generated</p>
