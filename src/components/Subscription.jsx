@@ -17,7 +17,7 @@ function Subscription() {
         
         
     async function getSubscriptionTopCardData() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/plan-details?user_id=KwL_XQ4`);
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/plan-details?user_id=${token}`);
         console.log(response[0]);
         // setSubscriptionTopCardData(response[0]);
         // Assuming response[0] contains the data
@@ -32,7 +32,7 @@ function Subscription() {
     }
 
     async function getPaymentHistoryData() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/plan-details?user_id=KwL_XQ4`);
+        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/plan-details?user_id=${token}`);
         console.log(response);
         setPaymentHistoryData(response);
     }

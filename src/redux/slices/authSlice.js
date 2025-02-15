@@ -5,7 +5,8 @@ const token = localStorage.getItem("token");
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    token: token || "ZAJ5_Bg", // Restore token from localStorage
+    // token: token || "ZAJ5_Bg", 
+    token: token || null // Restore token from localStorage
   },
   reducers: {
     login: (state, action) => {
@@ -13,7 +14,8 @@ const authSlice = createSlice({
       localStorage.setItem("token", action.payload); // Store token
     },
     logout: (state) => {
-      state.token = "ZAJ5_Bg";
+    // state.token = "ZAJ5_Bg";
+      state.token = null;
       localStorage.removeItem("token"); // Clear token on logout
     },
   },

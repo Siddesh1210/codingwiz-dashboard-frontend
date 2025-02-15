@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAddDetail } from "../../hooks/useAddDetail";
 import { useFetchDetail } from "../../hooks/useFetchDetail";
 import { useSelector } from "react-redux";
+import { useDeleteDetail } from "../../hooks/useDeleteDetail";
 
 function DeveloperPage({ apiData = [] }) {
   const [allData, setAllData] = useState(apiData);
@@ -12,6 +13,8 @@ function DeveloperPage({ apiData = [] }) {
   const [apiKey, setApiKey] = useState("");
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
 
   
   const itemsPerPage = 5;
@@ -62,6 +65,39 @@ function DeveloperPage({ apiData = [] }) {
     }
   };
 
+  async function handleDeleteKey() {
+    setLoading(true);
+    try {
+      const response = await useDeleteDetail('https://payments.resmic.com/api/v1/api-key', {
+            user_id: token,
+        })
+        console.log("Response is : ",response);
+        toast.success("API Key Deleted Successfully!", {
+            position: "top-center",
+            autoClose: 2000 
+        });
+        setTimeout(()=>{
+            toast.info("Fetching updated Data!", {
+                position: "top-center",
+                autoClose: 2000 
+            });
+        }, 2000)
+        setTimeout(()=>{
+            getallData();
+        }, 3000)
+      // Clear input
+    } catch (error) {
+      toast.error("Deleting API Failed!", {
+            position: "top-center",
+            autoClose: 4000 
+        });
+    } finally {
+        setShowDeleteModal(false);
+        setApiKey(""); 
+        setLoading(false);
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between items-end flex-wrap mb-6">
@@ -91,7 +127,7 @@ function DeveloperPage({ apiData = [] }) {
                   <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
                   <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
                   <td className="px-4 py-2">{allData?.api_expiry ? new Date(allData.api_expiry).toLocaleString() : "N/A"}</td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-center" onClick={() => setShowDeleteModal(true)}>
                     <button className="text-blue-600 hover:text-blue-800">Delete</button>
                   </td>
                 </tr>
@@ -151,6 +187,23 @@ function DeveloperPage({ apiData = [] }) {
           </div>
         </div>
       )}
+
+      {/* Delete Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-96">
+            <h2 className="text-md my-8 text-center">Are you sure you want to delete API Key?</h2>
+            <div className="flex justify-center space-x-2">
+              <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">Cancel</button>
+              <button onClick={handleDeleteKey} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+                {loading ? "Deleting..." : "Delete Key"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       <ToastContainer />
     </>
   );
