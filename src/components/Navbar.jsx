@@ -14,8 +14,8 @@ function Navbar() {
       <div className="flex justify-between items-center p-4 shadow-md">
         {/* Left: Logo and Title */}
         <div className="flex items-center space-x-3">
-          <img src={resmicLogo} width="50px"/>
-          <span className="text-2xl inline font-extrabold text-primary">Resmic</span>
+          <img src={resmicLogo} width="50px" className="filter grayscale"/>
+          <span className="text-2xl inline font-extrabold text-black">Resmic</span>
         </div>
 
         {/* Right: Icons for md+ screens */}

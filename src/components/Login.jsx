@@ -72,7 +72,7 @@ function Login() {
                     <div className="w-100 min-h-screen bg-secondary flex justify-center items-center">
                 <div className="md:w-[40%] w-[90%] flex flex-col justify-center text-center items-center">
                     <div className='flex justify-center items-center gap-4 my-4'>
-                        <img src={resmicLogo} alt="Resmic-Logo" width="60px"/>
+                        <img src={resmicLogo} alt="Resmic-Logo" width="60px" className='filter grayscale'/>
                         <h1 className='text-4xl font-bold text-primary'>Resmic Pro</h1>
                     </div>
 
