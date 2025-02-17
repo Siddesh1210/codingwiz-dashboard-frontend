@@ -6,7 +6,7 @@ function SubscriptionTopCard({data}) {
                 <div className="w-[45%] md:w-[24%] shadow-md rounded-md p-3 my-3 border">
                     <div className="text-gray-500 tracking-wide text-xs">CURRENT PLAN</div>
                     <div className="flex justify-between items-end my-3 flex-wrap gap-2">
-                        <div className="text-2xl font-bold"><i className="bi bi-currency-rupee"></i>{data.tier || 0}</div>
+                        <div className="text-2xl font-bold"><i className="bi bi-currency-dollar"></i>{data.tier || 0}</div>
                     </div>
                 </div>
                 {/* Card2 */}

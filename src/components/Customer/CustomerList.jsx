@@ -9,7 +9,7 @@ const CustomerList = ({data}) => {
   const [toDate, setToDate] = useState("");
   const [alertText, setAlertText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const handleFilterChange = (e) => {
     setStatusFilter(e?.target?.value);
@@ -121,12 +121,12 @@ const CustomerList = ({data}) => {
           <div className="relative">
             <input
                 type="text"
-                placeholder="Search by User"
+                placeholder="Search by User Address"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="px-4 py-2 border border-gray-300 rounded-md text-sm"
             />
-            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">User</p>
+            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">User Address</p>
           </div>
           {/* <div className="relative">
             <select
@@ -182,14 +182,16 @@ const CustomerList = ({data}) => {
       </div>
 
       <div className="overflow-x-auto rounded-md">
-        <table className="min-w-full bg-white border border-gray-200 text-sm">
+        <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
           <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2 text-left">User</th>
-              <th className="px-4 py-2 text-left">Total Transaction</th>
-              <th className="px-4 py-2 text-left">Total Spent</th>
-              <th className="px-4 py-2 text-left">First Payment</th>
-              <th className="px-4 py-2 text-left">Last Payment</th>
+              <th className="px-4 py-2">User</th>
+              <th className="px-4 py-2">Total Spent</th>
+              <th className="px-4 py-2">Total Transaction</th>
+              <th className="px-4 py-2">First Payment</th>
+              <th className="px-4 py-2">Last Payment</th>
+              <th className="px-4 py-2">Tag</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -197,11 +199,15 @@ const CustomerList = ({data}) => {
               currentItems?.length !== 0 ? (
                 currentItems?.map((item) => (
                   <tr key={item?.transaction_id} className="border-b">
-                    <td className="px-4 py-2">{item?.from_wallet_address}</td>
+                    <td className="px-4 py-2">{item?.from_wallet_address
+                            ? `${item.from_wallet_address.slice(0, 6)}...${item.from_wallet_address.slice(-4)}`
+                            : ""}</td>
+                    <td className="px-4 py-2">$ {item?.total_amount}</td>
                     <td className="px-4 py-2">{item?.total_transactions}</td>
-                    <td className="px-4 py-2">{item?.total_amount}</td>
                     <td className="px-4 py-2">{new Date(item?.first_transaction_date)?.toLocaleString()}</td>
                     <td className="px-4 py-2">{new Date(item?.last_transaction_date)?.toLocaleString()}</td>
+                    <td className="px-4 py-2">{item?.tag || "N/A"}</td>
+                    <td className="px-4 py-2">{item?.action || "-"}</td>
                   </tr>
                 ))
               ) : (

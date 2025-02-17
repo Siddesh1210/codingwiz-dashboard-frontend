@@ -9,7 +9,7 @@ const PaymentsList = ({data}) => {
   const [toDate, setToDate] = useState("");
   const [alertText, setAlertText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const handleFilterChange = (e) => {
     setStatusFilter(e?.target?.value);
@@ -123,9 +123,8 @@ const PaymentsList = ({data}) => {
                 className="text-sm px-4 py-2 border border-gray-300 rounded-md"
             >
                 <option value="all">All</option>
-                <option value="completed">Completed</option>
-                <option value="success">Success</option>
-                <option value="failure">Failure</option>
+                <option value="completed">Paid</option>
+                <option value="failed">Failed</option>
             </select>
             <p className="absolute -top-3 left-1 bg-white px-2 text-primary">Status</p>
           </div>
@@ -170,38 +169,43 @@ const PaymentsList = ({data}) => {
       </div>
 
       <div className="overflow-x-auto rounded-md">
-        <table className="min-w-full bg-white border border-gray-200 text-sm">
+      <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
           <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2 text-left">Transaction ID</th>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">Amount</th>
-              <th className="px-4 py-2 text-left">From Wallet</th>
-              <th className="px-4 py-2 text-left">To Wallet</th>
-              <th className="px-4 py-2 text-left">Created At</th>
+              <th className="px-4 py-2">Date</th>
+              <th className="px-4 py-2">Amount</th>
+              <th className="px-4 py-2">Status</th>
+              <th className="px-4 py-2">Customer</th>
+              <th className="px-4 py-2">Token</th>
+              <th className="px-4 py-2">Method</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
             {
-              currentItems?.length !== 0 ? (
-                currentItems?.map((item) => (
-                  <tr key={item?.transaction_id} className="border-b">
-                    <td className="px-4 py-2">{item?.transaction_id}</td>
-                    <td className="px-4 py-2">{item?.status}</td>
-                    <td className="px-4 py-2">{item?.amount}</td>
-                    <td className="px-4 py-2">{item?.from_wallet_address}</td>
-                    <td className="px-4 py-2">{item?.to_wallet_address}</td>
-                    <td className="px-4 py-2">{new Date(item?.created_at)?.toLocaleString()}</td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={6} className="text-center py-2">
-                    No recent payments found.
-                  </td>
-                </tr>
-              )
+                currentItems?.length !== 0 ? (
+                    currentItems?.map((item) => (
+                        <tr key={item?.transaction_id} className="border-b">
+                          <td className="px-4 py-2">{new Date(item?.created_at)?.toLocaleString()}</td>
+                          <td className="px-4 py-2">$ {item?.amount}</td>
+                          <td className="px-4 py-2">{item?.status == 'completed' ? <span className="bg-green-200 text-green-500 px-2">Paid</span> : <span className="bg-red-200 text-red-500 px-2">Failed</span>}</td>
+                          <td className="px-4 py-2">{item?.from_wallet_address
+                            ? `${item.from_wallet_address.slice(0, 6)}...${item.from_wallet_address.slice(-4)}`
+                            : ""}</td>
+                          <td className="px-4 py-2">{item?.token}</td>
+                          <td className="px-4 py-2">{item?.blockchain}</td>
+                          <td className="px-4 py-2">{item?.action || '-'}</td>
+                        </tr>
+                      ))
+                ) : (
+                    <tr>
+                        <td colSpan={6} className="text-center py-2">
+                          No payments found.
+                        </td>
+                    </tr>
+                )
             }
+            
           </tbody>
         </table>
       </div>

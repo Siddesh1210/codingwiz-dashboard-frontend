@@ -7,107 +7,107 @@ function SideBar() {
     const dispatch = useDispatch();
     return(
         <>
-            <div className="w-[15%] min-h-screen lg:flex flex-col hidden border-r-2">
+            <div className="w-[15%] min-h-screen lg:flex flex-col hidden border-r-2 bg-[#F9F9F9]">
                 <ul className="flex flex-col justify-center items-start mt-4 text-md">
                     <Link to="/" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-grid"></i> Home
+                            <i className="bi bi-grid mr-2"></i> Home
                         </div>
                     </Link>
                     <Link to="/payment" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/payment" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/payment" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-wallet2"></i> Payment
+                            <i className="bi bi-wallet2 mr-2"></i> Payment
                         </div>
                     </Link>
                     <Link to="/customer" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/customer" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/customer" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-list-columns"></i> Customer
+                            <i className="bi bi-list-columns mr-2"></i> Customer
                         </div>
                     </Link>
                     <Link to="/payment-link" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/payment-link" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/payment-link" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-list-columns"></i> Payment Links
+                            <i className="bi bi-list-columns mr-2"></i> Payment Links
                         </div>
                     </Link>
 
                     <Link to="/invoice" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/invoice" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/invoice" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-list-columns"></i> Invoice
+                            <i className="bi bi-list-columns mr-2"></i> Invoice
                         </div>
                     </Link>
 
                     <Link to="/coupon" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/coupon" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/coupon" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-graph-up"></i> Coupons
+                            <i className="bi bi-graph-up mr-2"></i> Coupons
                         </div>
                     </Link>
 
                     <Link to="/developer" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/developer" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/developer" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-gear"></i> Developer
+                            <i className="bi bi-gear mr-2"></i> Developer
                         </div>
                     </Link>
 
                     <Link to="/subscription" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/subscription" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/subscription" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-gear"></i> Subscription
+                            <i className="bi bi-gear mr-2"></i> Subscription
                         </div>
                     </Link>
 
                     <Link to="/setting" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
-                                location.pathname === "/setting" || location.pathname === "/setting/account-detail" || location.pathname === "/setting/business-detail" ? "bg-primary text-white" : "text-primary"
+                                location.pathname === "/setting" || location.pathname === "/setting/account-detail" || location.pathname === "/setting/business-detail" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-gear"></i> Settings
+                            <i className="bi bi-gear mr-2"></i> Settings
                         </div>
                     </Link>
 
                     <a href= "mailto:support@resmic.com" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
-                            className={`px-2 py-2 rounded-md mr-2 text-primary`}
+                            className={`px-2 py-2 rounded-md mr-2 text-black`}
                         >
-                            <i className="bi bi-gear"></i> Support
+                            <i className="bi bi-gear mr-2"></i> Support
                         </div>
                     </a>
 
                     <Link className="text-gray-800 cursor-pointer p-2 rounded w-full" onClick={() => dispatch(logout())} >
                         <div
-                            className={`px-2 py-2 rounded-md mr-2 text-primary`}>
-                            <i className="bi bi-gear"></i> Logout
+                            className={`px-2 py-2 rounded-md mr-2 text-black`}>
+                            <i className="bi bi-gear mr-2"></i> Logout
                         </div>
                     </Link>
                 </ul>
