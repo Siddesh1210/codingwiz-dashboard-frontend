@@ -13,7 +13,7 @@ function Navbar() {
     <nav className="bg-white sticky top-0 z-10">
       <div className="flex justify-between items-center p-4 shadow-md">
         {/* Left: Logo and Title */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 ml-2">
           <img src={resmicLogo} width="50px" className="filter grayscale"/>
           <span className="text-2xl inline font-extrabold text-black">Resmic</span>
         </div>

@@ -16,7 +16,6 @@ function CouponPage({ data = [] }) {
     const [loading, setLoading] = useState(false);
     const token = useSelector((state) => state.auth.token);
     const [couponData, setCouponData] = useState({
-        apiKey: "",
         coupon_code: "",
         discount_type: 0,
         discount_value: "",
@@ -88,7 +87,7 @@ function CouponPage({ data = [] }) {
   };
 
   const handleGenerateCoupon = async () => {
-    if (!couponData.apiKey.trim() || !couponData.coupon_code.trim() || !couponData.discount_value || !couponData.usage_limit || !couponData.min_order || !couponData.start_date || !couponData.end_date) {
+    if (!couponData.coupon_code.trim() || !couponData.discount_value || !couponData.usage_limit || !couponData.min_order || !couponData.start_date || !couponData.end_date) {
         return toast.error("All input field is required!", {
             position: 'top-center'
         });
@@ -98,8 +97,7 @@ function CouponPage({ data = [] }) {
     try {
       const response = await useAddDetail('https://payments.resmic.com/api/v1/coupon/create', couponData)
         console.log("Response is : ",response);
-        setCouponData({   // Reset state after success
-            apiKey: "",
+        setCouponData({
             coupon_code: "",
             discount_type: 0,
             discount_value: "",
@@ -178,17 +176,17 @@ function CouponPage({ data = [] }) {
       </div>
 
       <div className="overflow-x-auto rounded-md">
-        <table className="min-w-full bg-white border border-gray-200 text-sm">
+        <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
           <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2 text-left">Coupon Code</th>
-              <th className="px-4 py-2 text-left">Start From</th>
-              <th className="px-4 py-2 text-left">Coupon Type</th>
-              <th className="px-4 py-2 text-left">Discount Amount</th>
-              <th className="px-4 py-2 text-left">Min Order</th>
-              <th className="px-4 py-2 text-left">Use Count</th>
-              <th className="px-4 py-2 text-left">Status</th>
-              <th className="px-4 py-2 text-left">More</th>
+              <th className="px-4 py-2">Coupon Code</th>
+              <th className="px-4 py-2">Start From</th>
+              <th className="px-4 py-2">Coupon Type</th>
+              <th className="px-4 py-2">Discount Amount</th>
+              <th className="px-4 py-2">Min Order</th>
+              <th className="px-4 py-2">Use Count</th>
+              <th className="px-4 py-2">Status</th>
+              <th className="px-4 py-2">More</th>
             </tr>
           </thead>
           <tbody>
@@ -238,7 +236,7 @@ function CouponPage({ data = [] }) {
       </div>
 
       {/* No Keys Section */}
-      {filteredData.length==0 && (
+      {filteredData?.length==0 && (
         <div className="h-[70vh] flex items-center justify-center">
           <div className="text-center">
             <p className="text-sm my-2 text-gray-600">No Coupon generated</p>
@@ -258,20 +256,6 @@ function CouponPage({ data = [] }) {
           <h2 className="text-md font-bold mb-4">Generate Coupon</h2>
            <p class="text-xl font-bold cursor-pointer text-primary" onClick={() => setShowModal(false)}>X</p>
           </div>
-  
-          {/* API Key */}
-          <div>
-            <label className="text-xs font-semibold">API Key</label>
-            <input
-              type="text"
-              name="apiKey"
-              className="w-full border border-gray-300 p-2 rounded-md mb-3 text-xs outline-none focus:border focus:border-primary mt-2"
-              placeholder="Enter API Key"
-              value={couponData.apiKey}
-              onChange={handleChange}
-            />
-          </div>
-  
           {/* 2 Inputs Per Row */}
           <div className="grid grid-cols-2 gap-3 text-xs">
             {/* Coupon Code */}

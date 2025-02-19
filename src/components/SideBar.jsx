@@ -100,7 +100,7 @@ function SideBar() {
                         <div
                             className={`px-2 py-2 rounded-md mr-2 text-black`}
                         >
-                            <i className="bi bi-gear mr-2"></i> Support
+                            <i className="bi bi-headphones mr-2"></i> Support
                         </div>
                     </a>
 

@@ -83,7 +83,6 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
         }
     }
 
-
     return(
         <>
             <div className="w-100 min-h-screen bg-secondary flex justify-center items-center">

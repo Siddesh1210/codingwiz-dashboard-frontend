@@ -73,7 +73,7 @@ function Login() {
                 <div className="md:w-[40%] w-[90%] flex flex-col justify-center text-center items-center">
                     <div className='flex justify-center items-center gap-4 my-4'>
                         <img src={resmicLogo} alt="Resmic-Logo" width="60px" className='filter grayscale'/>
-                        <h1 className='text-4xl font-bold text-primary'>Resmic Pro</h1>
+                        <h1 className='text-4xl font-bold text-black'>Resmic Pro</h1>
                     </div>
 
                     {
@@ -109,7 +109,6 @@ function Login() {
                                 </button>
                             </div>
                     }
-
 
 
                     <p className='text-sm flex flex-wrap justify-center gap-1 items-center text-gray-500 my-3'> <i className="bi bi-c-circle"></i> Resmic 2025 <i className="bi bi-dot"></i> Contact <i className="bi bi-dot"></i> Privacy Policy <i className="bi bi-dot"></i> Terms of Conditions</p>

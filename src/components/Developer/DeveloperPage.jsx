@@ -14,9 +14,9 @@ function DeveloperPage({ apiData = [] }) {
   const [loading, setLoading] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
 
-  
   const itemsPerPage = 5;
 //   const totalPages = Math.ceil(allData.length / itemsPerPage);
 //   const allData = allData.length > 0 ? allData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
@@ -59,7 +59,7 @@ function DeveloperPage({ apiData = [] }) {
             autoClose: 4000 
         });
     } finally {
-        setShowModal(false);
+        // setShowModal(false);
         setApiKey(""); 
         setLoading(false);
     }
@@ -109,36 +109,40 @@ function DeveloperPage({ apiData = [] }) {
 
       <p className="text-sm">Tokens you have generated to access <span className="text-blue-500 cursor-pointer">Resmic API</span></p>
 
-      <div className="overflow-x-auto rounded-md my-6">
-        <table className="min-w-full bg-white border border-gray-200 text-sm">
-          <thead>
-            <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2 text-left">User ID</th>
-              <th className="px-4 py-2 text-left">API Key</th>
-              <th className="px-4 py-2 text-left">Created On</th>
-              <th className="px-4 py-2 text-left">Expiry</th>
-              <th className="px-4 py-2 text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {allData ? (
-                <tr className="border-b">
-                  <td className="px-4 py-2">{allData?.user_id || "N/A"}</td>
-                  <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
-                  <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
-                  <td className="px-4 py-2">{allData?.api_expiry ? new Date(allData.api_expiry).toLocaleString() : "N/A"}</td>
-                  <td className="px-4 py-2 text-center" onClick={() => setShowDeleteModal(true)}>
-                    <button className="text-blue-600 hover:text-blue-800">Delete</button>
-                  </td>
-                </tr>
-              ) : (
-              <tr>
-                <td colSpan={5} className="text-center py-2">No records found.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+      {
+        allData?.api_key && (
+            <div className="overflow-x-auto rounded-md my-6">
+                <table className="min-w-full bg-white border border-gray-200 text-sm">
+                <thead>
+                    <tr className="border-b bg-gray-100">
+                    <th className="px-4 py-2 text-left">User ID</th>
+                    <th className="px-4 py-2 text-left">API Key</th>
+                    <th className="px-4 py-2 text-left">Created On</th>
+                    <th className="px-4 py-2 text-left">Expiry</th>
+                    <th className="px-4 py-2 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {allData ? (
+                        <tr className="border-b">
+                        <td className="px-4 py-2">{allData?.user_id || "N/A"}</td>
+                        <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
+                        <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
+                        <td className="px-4 py-2">{allData?.api_expiry ? new Date(allData.api_expiry).toLocaleString() : "N/A"}</td>
+                        <td className="px-4 py-2 text-center" onClick={() => setShowDeleteModal(true)}>
+                            <button className="text-blue-600 hover:text-blue-800">Delete</button>
+                        </td>
+                        </tr>
+                    ) : (
+                    <tr>
+                        <td colSpan={5} className="text-center py-2">No records found.</td>
+                    </tr>
+                    )}
+                </tbody>
+                </table>
+            </div>
+        )
+      }
 
       {/* Pagination */}
       {/* {totalPages > 1 && (
@@ -154,7 +158,7 @@ function DeveloperPage({ apiData = [] }) {
       )} */}
 
       {/* No Keys Section */}
-      {!allData && (
+      {!allData.api_key && (
         <div className="h-[70vh] flex items-center justify-center">
           <div className="text-center">
             <p className="text-sm my-2 text-gray-600">No key generated</p>
@@ -170,19 +174,55 @@ function DeveloperPage({ apiData = [] }) {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 w-96">
-            <h2 className="text-xl font-bold mb-4">Generate API Key</h2>
-            <input
-              type="text"
-              className="w-full border border-gray-300 p-2 rounded-md mb-4"
-              placeholder="Enter API Key"
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-            />
+            <h2 className="text-xl font-bold mb-4">{allData?.api_key ? 'Copy' : 'Generate'} API Key</h2>
+            {
+                allData?.api_key && (
+                    <div className="relative my-3">
+                        <input
+                        type="text"
+                        className="w-full border border-gray-300 p-2 rounded-md pr-12"
+                        value={allData?.api_key}
+                        readOnly
+                        disabled
+                        />
+                        
+                        {allData?.api_key && (
+                        <button
+                            onClick={() => {
+                            navigator.clipboard.writeText(allData?.api_key);
+                            setCopied(true);
+                            setTimeout(() => setCopied(false), 2000);
+                            }}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-300 px-2 py-1 rounded text-sm"
+                        >
+                            {copied ? "Copied!" : "Copy"}
+                        </button>
+                        )}
+                    </div>
+                )
+            }
+            {
+                !allData?.api_key && (
+                    <input
+                        type="text"
+                        className="w-full border border-gray-300 p-2 rounded-md mb-4"
+                        placeholder="Enter API Key"
+                        value={apiKey}
+                        onChange={(e) => setApiKey(e.target.value)}
+                        />
+
+                )
+            }
+
             <div className="flex justify-end space-x-2">
               <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">Cancel</button>
-              <button onClick={handleGenerateKey} className="px-4 py-2 bg-blue-500 text-white rounded-md">
-                {loading ? "Generating..." : "Generate Key"}
-              </button>
+              {
+                !allData?.api_key && (
+                    <button onClick={handleGenerateKey} className="px-4 py-2 bg-primary text-white rounded-md">
+                        {loading ? "Generating..." : "Generate Key"}
+                    </button>
+                )
+              }
             </div>
           </div>
         </div>
@@ -195,7 +235,7 @@ function DeveloperPage({ apiData = [] }) {
             <h2 className="text-md my-8 text-center">Are you sure you want to delete API Key?</h2>
             <div className="flex justify-center space-x-2">
               <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">Cancel</button>
-              <button onClick={handleDeleteKey} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+              <button onClick={handleDeleteKey} className="px-4 py-2 bg-primary text-white rounded-md">
                 {loading ? "Deleting..." : "Delete Key"}
               </button>
             </div>
