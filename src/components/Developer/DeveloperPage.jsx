@@ -111,15 +111,17 @@ function DeveloperPage({ apiData = [] }) {
 
       {
         allData?.api_key && (
-            <div className="overflow-x-auto rounded-md my-6">
-                <table className="min-w-full bg-white border border-gray-200 text-sm">
+            <div className="overflow-x-auto my-6">
+                <table className="min-w-full bg-white border-y-0 border-gray-200 text-sm text-center">
                 <thead>
-                    <tr className="border-b bg-gray-100">
-                    <th className="px-4 py-2 text-left">User ID</th>
-                    <th className="px-4 py-2 text-left">API Key</th>
-                    <th className="px-4 py-2 text-left">Created On</th>
-                    <th className="px-4 py-2 text-left">Expiry</th>
-                    <th className="px-4 py-2 text-center">Action</th>
+                    <tr className="border-y-0 bg-gray-100">
+                    <th className="px-4 py-2">Name</th>
+                    <th className="px-4 py-2">Secret Key</th>
+                    <th className="px-4 py-2">Tier</th>
+                    <th className="px-4 py-2">Created On</th>
+                    <th className="px-4 py-2">isActive</th>
+                    <th className="px-4 py-2">Expires on</th>
+                    <th className="px-4 py-2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,7 +129,9 @@ function DeveloperPage({ apiData = [] }) {
                         <tr className="border-b">
                         <td className="px-4 py-2">{allData?.user_id || "N/A"}</td>
                         <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
+                        <td className="px-4 py-2">{allData?.tier || "N/A"}</td>
                         <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
+                        <td className="px-4 py-2">{allData?.isactive ? 'true' : 'false'}</td>
                         <td className="px-4 py-2">{allData?.api_expiry ? new Date(allData.api_expiry).toLocaleString() : "N/A"}</td>
                         <td className="px-4 py-2 text-center" onClick={() => setShowDeleteModal(true)}>
                             <button className="text-blue-600 hover:text-blue-800">Delete</button>
@@ -174,7 +178,7 @@ function DeveloperPage({ apiData = [] }) {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white rounded-lg p-6 w-96">
-            <h2 className="text-xl font-bold mb-4">{allData?.api_key ? 'Copy' : 'Generate'} API Key</h2>
+            <h2 className="text-xl font-bold mb-4">{allData?.api_key ? 'Copy Secret' : 'Generate API'}  Key</h2>
             {
                 allData?.api_key && (
                     <div className="relative my-3">

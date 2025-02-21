@@ -22,7 +22,7 @@ function HomeTopCard({data}) {
                 <div className="w-[45%] md:w-[24%] shadow-md rounded-md p-3 my-3 border">
                     <div className="text-gray-500 tracking-wide text-xs">TOTAL TRANSACTIONS</div>
                     <div className="flex justify-between items-end my-3 flex-wrap gap-2">
-                        <div className="text-2xl font-bold"><i className="bi bi-currency-dollar"></i>{data.total_txs || 0}</div>
+                        <div className="text-2xl font-bold">{data.total_txs || 0}</div>
                         <p className="text-xs text-green-500 font-semibold"><i className="bi bi-plus-lg"></i> 36% <i className="bi bi-arrow-up"></i></p>
                     </div>
                 </div>

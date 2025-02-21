@@ -9,7 +9,7 @@ const PaymentsList = ({data}) => {
   const [toDate, setToDate] = useState("");
   const [alertText, setAlertText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   const handleFilterChange = (e) => {
     setStatusFilter(e?.target?.value);
@@ -188,7 +188,7 @@ const PaymentsList = ({data}) => {
                         <tr key={item?.transaction_id} className="border-b">
                           <td className="px-4 py-2">{new Date(item?.created_at)?.toLocaleString()}</td>
                           <td className="px-4 py-2">$ {item?.amount}</td>
-                          <td className="px-4 py-2">{item?.status == 'completed' ? <span className="bg-green-200 text-green-500 px-2">Paid</span> : <span className="bg-red-200 text-red-500 px-2">Failed</span>}</td>
+                          <td className="px-4 py-2">{item?.status == 'completed' ? <span className="bg-green-200 text-green-500 px-2 rounded-sm">Paid</span> : <span className="bg-red-200 text-red-500 px-2 rounded-sm">Failed</span>}</td>
                           <td className="px-4 py-2">{item?.from_wallet_address
                             ? `${item.from_wallet_address.slice(0, 6)}...${item.from_wallet_address.slice(-4)}`
                             : ""}</td>

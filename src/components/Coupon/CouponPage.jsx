@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAddDetail } from "../../hooks/useAddDetail";
 import { useFetchDetail } from "../../hooks/useFetchDetail";
 import { useSelector } from "react-redux";
+import { useDeleteDetail } from "../../hooks/useDeleteDetail";
 
 function CouponPage({ data = [] }) {
     const [filteredData, setFilteredData] = useState([]);
@@ -24,6 +25,9 @@ function CouponPage({ data = [] }) {
         start_date: "",
         end_date: "",
       });
+    const [deleteCoupon, setDeleteCoupon] = useState("");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [loading2, setLoading2] = useState(false);
     const itemsPerPage = 5;
   
     const handleFilterChange = (e) => {
@@ -132,6 +136,40 @@ function CouponPage({ data = [] }) {
     }
   };
 
+  async function handleDeleteKey() {
+    setLoading2(true);
+    try {
+      const response = await useDeleteDetail('https://payments.resmic.com/api/v1/coupon', {
+            coupon_id: deleteCoupon,
+        })
+        
+        console.log("Response is : ",response);
+        toast.success("API Key Deleted Successfully!", {
+            position: "top-center",
+            autoClose: 2000 
+        });
+        setTimeout(()=>{
+            toast.info("Fetching updated Data!", {
+                position: "top-center",
+                autoClose: 2000 
+            });
+        }, 2000)
+        setTimeout(()=>{
+            getallData();
+        }, 3000)
+      // Clear input
+    } catch (error) {
+      toast.error("Deleting API Failed!", {
+            position: "top-center",
+            autoClose: 4000 
+        });
+    } finally {
+        setShowDeleteModal(false);
+        setDeleteCoupon(""); 
+        setLoading2(false);
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between items-end flex-wrap mb-6">
@@ -196,12 +234,15 @@ function CouponPage({ data = [] }) {
                   <tr key={item?.coupon_id} className="border-b">
                     <td className="px-4 py-2">{item?.coupon_code}</td>
                     <td className="px-4 py-2">{new Date(item?.start_date)?.toLocaleString()}</td>
-                    <td className="px-4 py-2">{item?.discount_type}</td>
+                    <td className="px-4 py-2">{Number(item?.discount_type) == 0 ? "Fixed Amount" : "Percentage" }</td>
                     <td className="px-4 py-2">{item?.discount_value}</td>
                     <td className="px-4 py-2">{item?.min_order}</td>
                     <td className="px-4 py-2">{item?.used_count}</td>
                     <td className="px-4 py-2">{item?.is_active ? "Active" : "Inactive"}</td>
-                    <td className="px-4 py-2">{item?.more || "N/A"}</td>
+                    <td className="px-4 py-2 text-red-500 cursor-pointer" onClick={()=>{
+                        setDeleteCoupon(coupon_code)
+                        setShowDeleteModal(true);
+                    }}>{"Delete"}</td>
                   </tr>
                 ))
               ) : (
@@ -366,6 +407,21 @@ function CouponPage({ data = [] }) {
           </div>
         </div>
       </div>
+      )}
+
+      {/* Delete Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-96">
+            <h2 className="text-md my-8 text-center">Are you sure you want to delete Coupon?</h2>
+            <div className="flex justify-center space-x-2">
+              <button onClick={() => setShowDeleteModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">Cancel</button>
+              <button onClick={handleDeleteKey} className="px-4 py-2 bg-primary text-white rounded-md">
+                {loading2 ? "Deleting..." : "Delete Key"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
       <ToastContainer />
     </>

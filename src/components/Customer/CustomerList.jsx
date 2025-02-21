@@ -9,7 +9,7 @@ const CustomerList = ({data}) => {
   const [toDate, setToDate] = useState("");
   const [alertText, setAlertText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 1;
 
   const handleFilterChange = (e) => {
     setStatusFilter(e?.target?.value);

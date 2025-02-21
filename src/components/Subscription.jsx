@@ -5,12 +5,75 @@ import PaymentHistory from "./Subscription/PaymentHistory";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAddDetail } from "../hooks/useAddDetail";
 
 
 function Subscription() {
     const [subscriptionTopCardData, setSubscriptionTopCardData] = useState([]);
     const [paymentHistoryData, setPaymentHistoryData] = useState([]);
     const token = useSelector((state) => state.auth.token);
+    const [loading2, setLoading2] = useState(false);
+    const [showBuyModal, setShowBuyModal] = useState(false);
+    const [buySubscriptionData, setBuySubscriptionData] = useState({
+        tier: "1",
+        month: "1",
+        transaction_id: "",
+        user_id: token,
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setBuySubscriptionData((prev) => ({
+        ...prev,
+        [name]: value,
+        }));
+    };
+
+    const handleBuySubscription = async () => {
+        if (!buySubscriptionData.tier.trim() || !buySubscriptionData.month || !buySubscriptionData.transaction_id) {
+            return toast.error("All input field is required!", {
+                position: 'top-center'
+            });
+        }
+    
+        setLoading2(true);
+        try {
+          const response = await useAddDetail('https://payments.resmic.com/api/v1/user/subscription', {
+            ...buySubscriptionData,
+            month: Number(buySubscriptionData.month),
+            tier: Number(buySubscriptionData.tier),
+          })
+            console.log("Response is : ",response);
+            setBuySubscriptionData({
+                tier: "1",
+                month: "1",
+                transaction_id: "",
+              });
+            toast.success("Subscription Buyed Successfully!", {
+                position: "top-center",
+                autoClose: 2000 
+            });
+            setTimeout(()=>{
+                toast.info("Fetching New Coupon List", {
+                    position: "top-center",
+                    autoClose: 2000 
+                });
+            }, 2000);
+            setTimeout(()=>{
+                getSubscriptionTopCardData();
+                getPaymentHistoryData();
+            }, 3000)
+          // Clear input
+        } catch (error) {
+          toast.error("Buying Subscription Fail!", {
+                position: "top-center",
+                autoClose: 4000 
+            });
+        } finally {
+            setShowBuyModal(false);
+            setLoading2(false);
+        }
+      };
 
     useEffect(()=>{
         getSubscriptionTopCardData();
@@ -51,13 +114,88 @@ function Subscription() {
             <div className="w-[100%] lg:w-[85%] min-h-screen p-4">
             <div className="flex justify-between items-end flex-wrap mb-6">
                 <h1 className="text-3xl font-bold">Subscriptions</h1>
-                <button className="px-2 py-1 text-sm bg-primary text-white rounded-md cursor-pointer font-semibold">
+                <button className="px-2 py-1 text-sm bg-primary text-white rounded-md cursor-pointer font-semibold" onClick={() => setShowBuyModal(true)}>
                 <i className="bi bi-plus-lg"></i> Buy Subscription
                 </button>
             </div>
                 <SubscriptionTopCard data={subscriptionTopCardData}/>
                 <PaymentHistory data={paymentHistoryData}/>
             </div>
+            {/* Buy Subscription Modal */}
+            {showBuyModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="mt-[10vh] mx-2 bg-white rounded-lg p-6 max-w-[500px] max-h-[80vh] overflow-y-auto shadow-lg">
+                    <div className="flex justify-between items-center">
+                    <h2 className="text-md font-bold mb-4">Buy Subscription</h2>
+                    <p class="text-xl font-bold cursor-pointer text-primary" onClick={() => setShowBuyModal(false)}>X</p>
+                    </div>
+                    <div className="grid grid-cols-1 gap-3 text-xs">
+            
+                        {/* Plan Type */}
+                        <div>
+                        <label className="text-xs font-semibold">Select Plan</label>
+                        <select
+                            name="tier"
+                            className="w-full border border-gray-300 p-2 rounded-md outline-none focus:border focus:border-primary mt-2"
+                            value={buySubscriptionData.tier}
+                            onChange={handleChange}
+                        >
+                            <option value={1}>Starter</option>
+                            <option value={2}>Growth</option>
+                            <option value={3}>Gold</option>
+                        </select>
+                        </div>
+
+                        {/* PLan Duration */}
+                        <div>
+                        <label className="text-xs font-semibold">Plan Duration</label>
+                        <select
+                            name="month"
+                            className="w-full border border-gray-300 p-2 rounded-md outline-none focus:border focus:border-primary mt-2"
+                            value={buySubscriptionData.month}
+                            onChange={handleChange}
+                        >
+                            <option value={1}>1 Month</option>
+                            <option value={3}>3 Months</option>
+                            <option value={6}>6 Months</option>
+                            <option value={12}>12 Months</option>
+                        </select>
+                        </div>
+            
+                        {/* Discount Value */}
+                        <div>
+                        <label className="text-xs font-semibold">Transaction ID</label>
+                        <input
+                            type="text"
+                            name="transaction_id"
+                            className="w-full border border-gray-300 p-2 rounded-md outline-none focus:border focus:border-primary mt-2"
+                            placeholder="Enter Transaction ID"
+                            value={buySubscriptionData.transaction_id}
+                            onChange={handleChange}
+                        />
+                        </div>
+            
+                        
+                    </div>
+            
+                    {/* Action Buttons */}
+                    <div className="flex justify-end space-x-2 mt-4">
+                        <button
+                        onClick={() => setShowBuyModal(false)}
+                        className="px-3 py-2 border border-gray-300 rounded-md text-sm"
+                        >
+                        Cancel
+                        </button>
+                        <button
+                        onClick={handleBuySubscription}
+                        className="px-3 py-2 bg-primary text-white rounded-md text-sm"
+                        >
+                        {loading2 ? "Buying..." : "Buy"}
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                )}
             <ToastContainer/>
         </>
     )

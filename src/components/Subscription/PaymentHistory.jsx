@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useAddDetail } from "../../hooks/useAddDetail";
 
 const PaymentHistory = ({data}) => {
   const [filteredData, setFilteredData] = useState(data);
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [showModal, setShowModal] = useState(false);
+  const token = useSelector((state) => state.auth.token);
+  const [loading, setLoading] = useState(false);
+
 
   const handleFilterChange = (e) => {
     const filterValue = e?.target?.value;
@@ -30,6 +38,31 @@ const PaymentHistory = ({data}) => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredData?.slice(indexOfFirstItem, indexOfLastItem);
+
+  async function handleTrail() {
+    setLoading(true);
+        try {
+          const response = await useAddDetail('https://payments.resmic.com/api/v1/user/trial-plan', {
+                user_id: token,
+            })
+            console.log("Response is : ",response);
+            toast.success("Trail Started Successfully!", {
+                position: "top-center",
+                autoClose: 4000 
+            });
+          // Clear input
+        } catch (error) {
+          toast.error("Starting Trail Fail!", {
+                position: "top-center",
+                autoClose: 4000 
+            });
+        } finally {
+            setShowModal(false);
+            setLoading(false);
+        }
+  }
+
+  
 
   return (
     <div className="w-[100%] p-3">
@@ -130,12 +163,30 @@ const PaymentHistory = ({data}) => {
           <div className="text-center">
             <p className="text-sm my-2 text-gray-600">No Subscription Found</p>
             <p className="text-md my-2">20 days free trial</p>
-            <button className="px-2 py-1 bg-blue-500 text-white rounded-md cursor-pointer">
+            <button className="px-2 py-1 bg-blue-500 text-white rounded-md cursor-pointer" onClick={() => setShowModal(true)}>
               <i className="bi bi-plus-lg"></i> Start Trial
             </button>
           </div>
         </div>
       )}
+
+      {/* Free Trail Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 w-96">
+            <h2 className="text-md my-8 text-center">Are you sure you want to Start Free Trail?</h2>
+            <div className="flex justify-center space-x-2">
+              <button onClick={() => setShowModal(false)} className="px-4 py-2 border border-gray-300 rounded-md">Cancel</button>
+              <button onClick={handleTrail} className="px-4 py-2 bg-primary text-white rounded-md">
+                {loading ? "Starting Trail..." : "Start Trail"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
+      <ToastContainer/>
     </div>
   );
 };
