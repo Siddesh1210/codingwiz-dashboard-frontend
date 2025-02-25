@@ -15,9 +15,13 @@ function DeveloperPage({ apiData = [] }) {
   const token = useSelector((state) => state.auth.token);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [secretKey, setSecretKey] = useState('');
 
+  useEffect(()=>{
+    setSecretKey(localStorage.getItem('api_secret'));
+  })
 
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 //   const totalPages = Math.ceil(allData.length / itemsPerPage);
 //   const allData = allData.length > 0 ? allData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
 
@@ -32,7 +36,7 @@ function DeveloperPage({ apiData = [] }) {
   }, [apiData])
 
   async function getallData() {
-    const response = await useFetchDetail(`https://payments.resmic.com/api/v1/api-key?user_id=${token}`);
+    const response = await useFetchDetail(`api/v1/api-key?user_id=${token}`);
     setAllData(response);
     console.log("Response is : ", allData);
   }
@@ -42,11 +46,12 @@ function DeveloperPage({ apiData = [] }) {
 
     setLoading(true);
     try {
-      const response = await useAddDetail('https://payments.resmic.com/api/v1/api-key', {
+      const response = await useAddDetail('api/v1/api-key', {
             user_id: token,
             api_key: apiKey
         })
-        console.log("Response is : ",response);
+        localStorage.setItem('api_secret', response.data?.api_secret);
+        setSecretKey(response.data?.api_secret);
         toast.success("API Generated Successfully!", {
             position: "top-center",
             autoClose: 4000 
@@ -68,7 +73,7 @@ function DeveloperPage({ apiData = [] }) {
   async function handleDeleteKey() {
     setLoading(true);
     try {
-      const response = await useDeleteDetail('https://payments.resmic.com/api/v1/api-key', {
+      const response = await useDeleteDetail('api/v1/api-key', {
             user_id: token,
         })
         console.log("Response is : ",response);
@@ -128,7 +133,7 @@ function DeveloperPage({ apiData = [] }) {
                     {allData ? (
                         <tr className="border-b">
                         <td className="px-4 py-2">{allData?.user_id || "N/A"}</td>
-                        <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
+                        <td className="px-4 py-2">{secretKey || "N/A"}</td>
                         <td className="px-4 py-2">{allData?.tier || "N/A"}</td>
                         <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
                         <td className="px-4 py-2">{allData?.isactive ? 'true' : 'false'}</td>
@@ -185,7 +190,7 @@ function DeveloperPage({ apiData = [] }) {
                         <input
                         type="text"
                         className="w-full border border-gray-300 p-2 rounded-md pr-12"
-                        value={allData?.api_key}
+                        value={secretKey}
                         readOnly
                         disabled
                         />
@@ -193,7 +198,7 @@ function DeveloperPage({ apiData = [] }) {
                         {allData?.api_key && (
                         <button
                             onClick={() => {
-                            navigator.clipboard.writeText(allData?.api_key);
+                            navigator.clipboard.writeText(secretKey);
                             setCopied(true);
                             setTimeout(() => setCopied(false), 2000);
                             }}

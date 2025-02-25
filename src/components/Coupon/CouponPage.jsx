@@ -17,6 +17,7 @@ function CouponPage({ data = [] }) {
     const [loading, setLoading] = useState(false);
     const token = useSelector((state) => state.auth.token);
     const [couponData, setCouponData] = useState({
+        user_id: token,
         coupon_code: "",
         discount_type: 0,
         discount_value: "",
@@ -28,7 +29,7 @@ function CouponPage({ data = [] }) {
     const [deleteCoupon, setDeleteCoupon] = useState("");
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [loading2, setLoading2] = useState(false);
-    const itemsPerPage = 5;
+    const itemsPerPage = 10;
   
     const handleFilterChange = (e) => {
       setStatusFilter(e?.target?.value);
@@ -78,7 +79,7 @@ function CouponPage({ data = [] }) {
     };
 
   async function getallData() {
-    const response = await useFetchDetail(`https://payments.resmic.com/api/v1/coupon/coupon-list?user_id=${token}`);
+    const response = await useFetchDetail(`api/v1/coupon/coupon-list?user_id=${token}`);
     setFilteredData(response);
   }
 
@@ -99,9 +100,10 @@ function CouponPage({ data = [] }) {
 
     setLoading(true);
     try {
-      const response = await useAddDetail('https://payments.resmic.com/api/v1/coupon/create', couponData)
+      const response = await useAddDetail('api/v1/coupon/create', couponData)
         console.log("Response is : ",response);
         setCouponData({
+            user_id: token,
             coupon_code: "",
             discount_type: 0,
             discount_value: "",
@@ -139,7 +141,7 @@ function CouponPage({ data = [] }) {
   async function handleDeleteKey() {
     setLoading2(true);
     try {
-      const response = await useDeleteDetail('https://payments.resmic.com/api/v1/coupon', {
+      const response = await useDeleteDetail('api/v1/coupon', {
             coupon_id: deleteCoupon,
         })
         
@@ -240,7 +242,7 @@ function CouponPage({ data = [] }) {
                     <td className="px-4 py-2">{item?.used_count}</td>
                     <td className="px-4 py-2">{item?.is_active ? "Active" : "Inactive"}</td>
                     <td className="px-4 py-2 text-red-500 cursor-pointer" onClick={()=>{
-                        setDeleteCoupon(coupon_code)
+                        setDeleteCoupon(item?.coupon_id)
                         setShowDeleteModal(true);
                     }}>{"Delete"}</td>
                   </tr>
@@ -295,7 +297,7 @@ function CouponPage({ data = [] }) {
         <div className="mt-[10vh] mx-2 bg-white rounded-lg p-6 max-w-[500px] max-h-[80vh] overflow-y-auto shadow-lg">
           <div className="flex justify-between items-center">
           <h2 className="text-md font-bold mb-4">Generate Coupon</h2>
-           <p class="text-xl font-bold cursor-pointer text-primary" onClick={() => setShowModal(false)}>X</p>
+           <p className="text-xl font-bold cursor-pointer text-primary" onClick={() => setShowModal(false)}>X</p>
           </div>
           {/* 2 Inputs Per Row */}
           <div className="grid grid-cols-2 gap-3 text-xs">

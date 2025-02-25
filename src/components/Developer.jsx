@@ -12,7 +12,7 @@ function Developer() {
     
     
         async function getAPIData() {
-            const response = await useFetchDetail(`https://payments.resmic.com/api/v1/api-key?user_id=${token}`);
+            const response = await useFetchDetail(`api/v1/api-key?user_id=${token}`);
             setAPIData(response);
         }
     return(

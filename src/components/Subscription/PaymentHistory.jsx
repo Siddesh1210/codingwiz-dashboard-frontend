@@ -8,7 +8,7 @@ const PaymentHistory = ({data}) => {
   const [filteredData, setFilteredData] = useState(data);
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [showModal, setShowModal] = useState(false);
   const token = useSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ const PaymentHistory = ({data}) => {
   async function handleTrail() {
     setLoading(true);
         try {
-          const response = await useAddDetail('https://payments.resmic.com/api/v1/user/trial-plan', {
+          const response = await useAddDetail('api/v1/user/trial-plan', {
                 user_id: token,
             })
             console.log("Response is : ",response);
@@ -52,7 +52,7 @@ const PaymentHistory = ({data}) => {
             });
           // Clear input
         } catch (error) {
-          toast.error("Starting Trail Fail!", {
+          toast.error(error || "Starting Trial Fail!", {
                 position: "top-center",
                 autoClose: 4000 
             });
@@ -66,27 +66,6 @@ const PaymentHistory = ({data}) => {
 
   return (
     <div className="w-[100%] p-3">
-      {
-        filteredData?.length>0 && (
-            <div className="flex justify-center mt-4">
-                <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50"
-                >
-                Prev
-                </button>
-                <span className="px-4 py-2">{currentPage}</span>
-                <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage * itemsPerPage >= filteredData?.length}
-                className="px-4 py-2 border border-gray-300 rounded-md disabled:opacity-50"
-                >
-                Next
-                </button>
-            </div>
-        )
-      }
 
       {
         filteredData?.length>0 && (
@@ -111,8 +90,8 @@ const PaymentHistory = ({data}) => {
                                 <td className="px-4 py-2">{item?.created_at}</td>
                                 <td className="px-4 py-2">{item?.amount}</td>
                                 <td className="px-4 py-2">{item?.tier}</td>
-                                <td className="px-4 py-2">{new Date(item?.start_date)?.toLocaleString()}</td>
-                                <td className="px-4 py-2">{new Date(item?.end_date)?.toLocaleString()}</td>
+                                <td className="px-4 py-2">{item.start_date?.split("T")[0]}</td>
+                                <td className="px-4 py-2">{item?.end_date?.split("T")[0]}</td>
                                 <td className="px-4 py-2">{item?.method || "N/A"}</td>
                                 <td className="px-4 py-2">{item?.more || "N/A"}</td>
                                 

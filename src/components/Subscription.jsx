@@ -17,7 +17,6 @@ function Subscription() {
     const [buySubscriptionData, setBuySubscriptionData] = useState({
         tier: "1",
         month: "1",
-        transaction_id: "",
         user_id: token,
     });
 
@@ -30,7 +29,7 @@ function Subscription() {
     };
 
     const handleBuySubscription = async () => {
-        if (!buySubscriptionData.tier.trim() || !buySubscriptionData.month || !buySubscriptionData.transaction_id) {
+        if (!buySubscriptionData.tier.trim() || !buySubscriptionData.month) {
             return toast.error("All input field is required!", {
                 position: 'top-center'
             });
@@ -38,7 +37,7 @@ function Subscription() {
     
         setLoading2(true);
         try {
-          const response = await useAddDetail('https://payments.resmic.com/api/v1/user/subscription', {
+          const response = await useAddDetail('api/v1/user/subscription', {
             ...buySubscriptionData,
             month: Number(buySubscriptionData.month),
             tier: Number(buySubscriptionData.tier),
@@ -47,7 +46,7 @@ function Subscription() {
             setBuySubscriptionData({
                 tier: "1",
                 month: "1",
-                transaction_id: "",
+                user_id: token,
               });
             toast.success("Subscription Buyed Successfully!", {
                 position: "top-center",
@@ -83,7 +82,7 @@ function Subscription() {
         
     async function getSubscriptionTopCardData() {
         try {
-            const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/plan-details?user_id=${token}`);
+            const response = await useFetchDetail(`api/v1/user/plan-details?user_id=${token}`);
             console.log(response[0]);
             // setSubscriptionTopCardData(response[0]);
             // Assuming response[0] contains the data
@@ -95,16 +94,17 @@ function Subscription() {
             
             // Set the formatted data in state
             setSubscriptionTopCardData(formattedData);
-        } catch (error) {
+        } catch (error) {   
+            if(error == "Error: No Result found") return;
             toast.error(error || "Something went wrong!", {
-                position: "top-center",
+                position: "top-center", 
                 autoClose: 4000
             });
         }
     }
 
     async function getPaymentHistoryData() {
-            const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/plan-details?user_id=${token}`);
+            const response = await useFetchDetail(`api/v1/user/plan-details?user_id=${token}`);
             console.log(response);
             setPaymentHistoryData(response);
     }
@@ -127,7 +127,7 @@ function Subscription() {
                     <div className="mt-[10vh] mx-2 bg-white rounded-lg p-6 max-w-[500px] max-h-[80vh] overflow-y-auto shadow-lg">
                     <div className="flex justify-between items-center">
                     <h2 className="text-md font-bold mb-4">Buy Subscription</h2>
-                    <p class="text-xl font-bold cursor-pointer text-primary" onClick={() => setShowBuyModal(false)}>X</p>
+                    <p className="text-xl font-bold cursor-pointer text-primary" onClick={() => setShowBuyModal(false)}>X</p>
                     </div>
                     <div className="grid grid-cols-1 gap-3 text-xs">
             
@@ -142,7 +142,7 @@ function Subscription() {
                         >
                             <option value={1}>Starter</option>
                             <option value={2}>Growth</option>
-                            <option value={3}>Gold</option>
+                            {/* <option value={3}>Gold</option> */}
                         </select>
                         </div>
 
@@ -160,19 +160,6 @@ function Subscription() {
                             <option value={6}>6 Months</option>
                             <option value={12}>12 Months</option>
                         </select>
-                        </div>
-            
-                        {/* Discount Value */}
-                        <div>
-                        <label className="text-xs font-semibold">Transaction ID</label>
-                        <input
-                            type="text"
-                            name="transaction_id"
-                            className="w-full border border-gray-300 p-2 rounded-md outline-none focus:border focus:border-primary mt-2"
-                            placeholder="Enter Transaction ID"
-                            value={buySubscriptionData.transaction_id}
-                            onChange={handleChange}
-                        />
                         </div>
             
                         

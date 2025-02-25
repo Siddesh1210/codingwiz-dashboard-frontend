@@ -29,7 +29,7 @@ function Login() {
     async function submitEmail() {
         try {
             setIsValid(false);
-            const response = await useAddDetail('https://payments.resmic.com/api/v1/auth/login', {
+            const response = await useAddDetail('api/v1/auth/login', {
                     email: email
             })
             toast.success("OTP Sent Successfully!", {
@@ -81,7 +81,7 @@ function Login() {
                         (
                         <div className="w-[90%] bg-white my-3 p-5 rounded-xl flex flex-col justify-center items-center">
                             <h3 className='text-2xl font-bold my-3'>Sign in to your account</h3>
-                            <p className='text-gray-500 text-md my-3 tracking-wide'>Resmic is available on Polygon, Solana, Optimism, Base, <br></br>Arbitrum, Tron, BNB and Ethereum</p>
+                            <p className='text-gray-500 text-md my-3 tracking-wide'>Resmic is available on Ethereum, Polygon, XDC-Network, <br></br>BSC and Sepolia</p>
                             <button onClick={handlePage} className='w-[90%] bg-primary py-2 rounded-md text-white text-center cursor-pointer flex items-center justify-center gap-3 my-3 text-md border-primary'><i className="bi bi-envelope"></i> Sign in with your Email</button>
                         </div>) : 
                             <div className="w-[90%] bg-white my-3 p-5 rounded-xl flex flex-col justify-center items-center">
@@ -111,7 +111,7 @@ function Login() {
                     }
 
 
-                    <p className='text-sm flex flex-wrap justify-center gap-1 items-center text-gray-500 my-3'> <i className="bi bi-c-circle"></i> Resmic 2025 <i className="bi bi-dot"></i> Contact <i className="bi bi-dot"></i> Privacy Policy <i className="bi bi-dot"></i> Terms of Conditions</p>
+                    <p className='text-sm flex flex-wrap justify-center gap-1 items-center text-gray-500 my-3'> <i className="bi bi-c-circle"></i> Resmic 2025 <i className="bi bi-dot"></i> <a href="mailto:support@resmic.com">Contact</a> <i className="bi bi-dot"></i> <a href="https://resmic.com/privacy-policy/" target='_blank'>Privacy Policy</a> <i className="bi bi-dot"></i> <a href="https://resmic.com/terms-and-conditions/" target='_blank'>Terms of Conditions</a></p>
                 </div>
                     </div>
                 ) : <VerifyOtp userEmail = {email} makeOtpPageFalse = {makeOtpPageFalse}/>

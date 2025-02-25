@@ -40,7 +40,7 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
     async function verifyOtp() {
         try {
             setIsOtpButtonDisabled(true);
-            const response = await useAddDetail('https://payments.resmic.com/api/v1/auth/verify', {
+            const response = await useAddDetail('api/v1/auth/verify', {
                     email: userEmail,
                     otp: otp.join("")
             })
@@ -65,7 +65,7 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
     async function resendOtp() {
         try {
             setShowDot(true);
-            const response = await useAddDetail('https://payments.resmic.com/api/v1/auth/resendotp', {
+            const response = await useAddDetail('api/v1/auth/resendotp', {
                     email: userEmail,
             })
             toast.success("OTP Resent Successfully!", {

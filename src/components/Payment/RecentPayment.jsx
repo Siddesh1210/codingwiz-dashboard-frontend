@@ -4,7 +4,7 @@ const RecentPayment = ({data}) => {
   const [filteredData, setFilteredData] = useState(data);
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
 
   const handleFilterChange = (e) => {
     const filterValue = e?.target?.value;

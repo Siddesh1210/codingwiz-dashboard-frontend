@@ -20,19 +20,19 @@ function Home() {
     },[])
 
     async function getHomeTopCardData() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/stats?user_id=${token}`);
+        const response = await useFetchDetail(`api/v1/dashboard/stats?user_id=${token}`);
         console.log(response[0]);
         setHomeTopCardData(response[0]);
     }
 
     async function getTransactionChartData() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/graph?user_id=${token}`);
+        const response = await useFetchDetail(`api/v1/dashboard/graph?user_id=${token}`);
         console.log(response);
         setTransactionChartData(response);
     }
 
     async function getRecentPayment() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/recent-txs?user_id=${token}`);
+        const response = await useFetchDetail(`api/v1/dashboard/recent-txs?user_id=${token}&limit=10&page=1`);
         console.log(response);
         setPaymentData(response);
     }

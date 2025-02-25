@@ -6,6 +6,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     token: token || "ZAJ5_Bg", 
+    // token: "dvGIaYX"
     // token: token || null // Restore token from localStorage
   },
   reducers: {

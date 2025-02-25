@@ -12,7 +12,7 @@ function Payment() {
 
 
     async function getRecentPayment() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/dashboard/recent-txs?user_id=${token}`);
+        const response = await useFetchDetail(`api/v1/dashboard/recent-txs?user_id=${token}`);
         console.log(response);
         setPaymentData(response);
     }

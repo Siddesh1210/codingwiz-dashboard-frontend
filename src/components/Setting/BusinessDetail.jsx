@@ -32,7 +32,7 @@ function BusinessDetail() {
     async function handleSaveChanges() {
 
         try {
-                const response = await useUpdateDetail('https://payments.resmic.com/api/v1/user/company', {
+                const response = await useUpdateDetail('api/v1/user/company', {
                     user_id: token,
                     name: formData.businessName,
                     address: formData.businessAddress, 
@@ -80,7 +80,7 @@ function BusinessDetail() {
     },[]);
 
     async function getBusinessDetail() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user/company?user_id=${token}`)
+        const response = await useFetchDetail(`api/v1/user/company?user_id=${token}`)
         console.log("Business Detail: ", response);
 
         // Set the state with API data

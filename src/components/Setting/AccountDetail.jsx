@@ -27,7 +27,7 @@ function AccountDetail() {
     // Handle form submission
     async function handleSaveChanges() {
         try {
-                const response = await useUpdateDetail('https://payments.resmic.com/api/v1/user', {
+                const response = await useUpdateDetail('api/v1/user', {
                     name: `${formData.firstName} ${formData.lastName}`,
                     email: formData.email,
                 })
@@ -65,7 +65,7 @@ function AccountDetail() {
     },[]);
 
     async function getUserDetail() {
-        const response = await useFetchDetail(`https://payments.resmic.com/api/v1/user?user_id=${token}`)
+        const response = await useFetchDetail(`api/v1/user?user_id=${token}`)
         console.log("User Detail: ", response);
         const nameParts = response.name.split(" ");
         const firstName = nameParts[0] || "";

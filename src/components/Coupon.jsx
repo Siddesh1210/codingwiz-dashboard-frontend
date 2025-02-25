@@ -15,7 +15,7 @@ function Coupon() {
     
         async function getAPIData() {
             try {
-                const response = await useFetchDetail(`https://payments.resmic.com/api/v1/coupon/coupon-list?user_id=${token}`);
+                const response = await useFetchDetail(`api/v1/coupon/coupon-list?user_id=${token}`);
                 setAPIData(response);
             } catch (error) {
                 toast.error(error || "Something went wrong!", {

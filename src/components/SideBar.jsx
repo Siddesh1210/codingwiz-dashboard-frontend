@@ -33,7 +33,7 @@ function SideBar() {
                                 location.pathname === "/customer" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-list-columns mr-2"></i> Customer
+                            <i className="bi bi-people mr-2"></i> Customer
                         </div>
                     </Link>
                     <Link to="/payment-link" className="text-gray-800 cursor-pointer p-2 rounded w-full">
@@ -42,7 +42,7 @@ function SideBar() {
                                 location.pathname === "/payment-link" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-list-columns mr-2"></i> Payment Links
+                            <i className="bi bi-link-45deg mr-2"></i> Payment Links
                         </div>
                     </Link>
 
@@ -62,7 +62,7 @@ function SideBar() {
                                 location.pathname === "/coupon" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-graph-up mr-2"></i> Coupons
+                            <i className="bi bi-bookmark-heart-fill mr-2"></i> Coupons
                         </div>
                     </Link>
 
@@ -72,7 +72,7 @@ function SideBar() {
                                 location.pathname === "/developer" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-gear mr-2"></i> Developer
+                            <i className="bi bi-code-slash mr-2"></i> Developer
                         </div>
                     </Link>
 
@@ -82,7 +82,7 @@ function SideBar() {
                                 location.pathname === "/subscription" ? "bg-primary text-white" : "text-black"
                             }`}
                         >
-                            <i className="bi bi-gear mr-2"></i> Subscription
+                            <i className="bi bi-bag-plus-fill mr-2"></i> Subscription
                         </div>
                     </Link>
 
@@ -100,14 +100,14 @@ function SideBar() {
                         <div
                             className={`px-2 py-2 rounded-md mr-2 text-black`}
                         >
-                            <i className="bi bi-headphones mr-2"></i> Support
+                            <i className="bi bi-headset mr-2"></i> Support
                         </div>
                     </a>
 
                     <Link className="text-gray-800 cursor-pointer p-2 rounded w-full" onClick={() => dispatch(logout())} >
                         <div
                             className={`px-2 py-2 rounded-md mr-2 text-black`}>
-                            <i className="bi bi-gear mr-2"></i> Logout
+                            <i className="bi bi-box-arrow-right mr-2"></i> Logout
                         </div>
                     </Link>
                 </ul>
