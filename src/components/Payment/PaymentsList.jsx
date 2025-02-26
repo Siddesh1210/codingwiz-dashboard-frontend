@@ -87,6 +87,7 @@ const PaymentsList = () => {
                 onChange={handleFilterChange}
                 className="text-sm px-4 py-2 border border-gray-300 rounded-md"
             >
+                <option value="" disabled>Select</option>
                 <option value="completed">Paid</option>
                 <option value="failed">Failed</option>
             </select>
