@@ -92,7 +92,7 @@ const RecentPayment = ({data}) => {
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-center mt-4">
+      {/* <div className="flex justify-center mt-4">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
@@ -108,7 +108,7 @@ const RecentPayment = ({data}) => {
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

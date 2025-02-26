@@ -158,7 +158,7 @@ function CouponPage({ data = [] }) {
         }, 2000)
         setTimeout(()=>{
             getallData();
-        }, 3000)
+        }, 5000)
       // Clear input
     } catch (error) {
       toast.error("Deleting API Failed!", {

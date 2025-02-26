@@ -74,7 +74,7 @@ const CustomerList = () => {
             />
             <p className="absolute -top-3 left-1 bg-white px-2 text-primary">User Address</p>
           </div>
-          <div className="relative">
+          {/* <div className="relative">
             <input
               type="date"
               value={fromDate}
@@ -91,7 +91,7 @@ const CustomerList = () => {
               className="px-4 py-2 border border-gray-300 rounded-md text-sm"
             />
             <p className="absolute -top-3 left-1 bg-white px-2 text-primary">End Date</p>
-          </div>
+          </div> */}
         </div>
         <button onClick={applyFilters} className="px-4 py-2 bg-primary text-white rounded-md text-sm">
           Apply Filters
