@@ -28,10 +28,9 @@ function AccountDetail() {
     async function handleSaveChanges() {
         try {
                 const response = await useUpdateDetail('api/v1/user', {
-                    name: `${formData.firstName} ${formData.lastName}`,
+                    name: `${formData.firstName?.trim()} ${formData.lastName?.trim()}`,
                     email: formData.email,
                 })
-                console.log("Response is : ", response);
                 toast.success("Personal Detail Saved Successfully!", {
                     position: "top-center",
                     autoClose: 3000 
@@ -66,10 +65,9 @@ function AccountDetail() {
 
     async function getUserDetail() {
         const response = await useFetchDetail(`api/v1/user?user_id=${token}`)
-        console.log("User Detail: ", response);
-        const nameParts = response.name.split(" ");
-        const firstName = nameParts[0] || "";
-        const lastName = nameParts[1] || "";
+        const nameParts = response?.name?.split(" ");
+        const firstName = nameParts && nameParts[0] || "";
+        const lastName = nameParts && nameParts[1] || "";  
 
         // Set the state with API data
         setFormData({

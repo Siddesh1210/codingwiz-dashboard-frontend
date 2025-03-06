@@ -67,12 +67,12 @@ const CustomerList = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search by User Address"
+              placeholder="Search by Customer Address"
               value={userAddress}
               onChange={handleSearchChange}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm"
             />
-            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">User Address</p>
+            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">Customer Address</p>
           </div>
           {/* <div className="relative">
             <input
@@ -108,7 +108,7 @@ const CustomerList = () => {
         <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
           <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2">User</th>
+              <th className="px-4 py-2">Customer Address</th>
               <th className="px-4 py-2">Total Spent</th>
               <th className="px-4 py-2">Total Transactions</th>
               <th className="px-4 py-2">First Payment</th>
@@ -119,11 +119,9 @@ const CustomerList = () => {
           <tbody>
             {data.length ? (
               data.map((item) => (
-                <tr key={item.transaction_id} className="border-b">
-                  <td className="px-4 py-2">{item?.from_wallet_address
-                            ? `${item.from_wallet_address.slice(0, 6)}...${item.from_wallet_address.slice(-4)}`
-                            : ""}</td>
-                  <td className="px-4 py-2">$ {item.total_amount}</td>
+                <tr key={item.from_wallet_address} className="border-b">
+                  <td className="px-4 py-2">{item?.from_wallet_address}</td>
+                  <td className="px-4 py-2">₹ {item.total_amount}</td>
                   <td className="px-4 py-2">{item.total_transactions}</td>
                   <td className="px-4 py-2">{new Date(item.first_transaction_date).toLocaleString()}</td>
                   <td className="px-4 py-2">{new Date(item.last_transaction_date).toLocaleString()}</td>

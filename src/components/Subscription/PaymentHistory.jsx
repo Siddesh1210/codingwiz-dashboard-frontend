@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAddDetail } from "../../hooks/useAddDetail";
+import { useFetchDetail } from "../../hooks/useFetchDetail";
 
 const PaymentHistory = ({data}) => {
   const [filteredData, setFilteredData] = useState(data);
@@ -45,11 +46,20 @@ const PaymentHistory = ({data}) => {
           const response = await useAddDetail('api/v1/user/trial-plan', {
                 user_id: token,
             })
-            console.log("Response is : ",response);
-            toast.success("Trail Started Successfully!", {
+            
+            toast.success("Trial Plan Started Successfully!", {
                 position: "top-center",
-                autoClose: 4000 
+                autoClose: 3000 
             });
+            setTimeout(()=>{
+                toast.info("Fetching updated detail!", {
+                    position: "top-center",
+                    autoClose: 4000 
+                });
+            }, 2000)
+            setTimeout(()=>{
+                getPaymentHistoryData();
+            }, 3000)
           // Clear input
         } catch (error) {
           toast.error(error || "Starting Trial Fail!", {
@@ -62,7 +72,10 @@ const PaymentHistory = ({data}) => {
         }
   }
 
-  
+  async function getPaymentHistoryData() {
+    const response = await useFetchDetail(`api/v1/user/plan-details?user_id=${token}`);
+    setFilteredData(response);
+  }
 
   return (
     <div className="w-[100%] p-3">
@@ -70,29 +83,29 @@ const PaymentHistory = ({data}) => {
       {
         filteredData?.length>0 && (
             <div className="overflow-x-auto rounded-md">
-                <table className="min-w-full bg-white border border-gray-200 text-sm">
+                <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
                 <thead>
                     <tr className="border-b bg-gray-100">
-                    <th className="px-4 py-2 text-left">Date</th>
-                    <th className="px-4 py-2 text-left">Amount</th>
-                    <th className="px-4 py-2 text-left">Tier</th>
-                    <th className="px-4 py-2 text-left">Start Date</th>
-                    <th className="px-4 py-2 text-left">End Date</th>
-                    <th className="px-4 py-2 text-left">Method</th>
-                    <th className="px-4 py-2 text-left">More</th>
+                    <th className="px-4 py-2">Date</th>
+                    <th className="px-4 py-2">Amount</th>
+                    <th className="px-4 py-2">Tier</th>
+                    <th className="px-4 py-2">Start Date</th>
+                    <th className="px-4 py-2">End Date</th>
+                    <th className="px-4 py-2">Payment Status</th>
+                    <th className="px-4 py-2">More</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         currentItems?.length !== 0 ? (
                             currentItems?.map((item) => (
-                                <tr key={item?.created_at} className="border-b">
-                                <td className="px-4 py-2">{item?.created_at}</td>
+                                <tr key={item?.createdAt} className="border-b">
+                                <td className="px-4 py-2">{item?.createdAt}</td>
                                 <td className="px-4 py-2">{item?.amount}</td>
                                 <td className="px-4 py-2">{item?.tier}</td>
                                 <td className="px-4 py-2">{item.start_date?.split("T")[0]}</td>
                                 <td className="px-4 py-2">{item?.end_date?.split("T")[0]}</td>
-                                <td className="px-4 py-2">{item?.method || "N/A"}</td>
+                                <td className="px-4 py-2">{item?.status == 'completed' ? <span className="bg-green-200 text-green-500 px-2 rounded-sm">Paid</span> : <span className="bg-red-200 text-red-500 px-2 rounded-sm">Failed</span>}</td>
                                 <td className="px-4 py-2">{item?.more || "N/A"}</td>
                                 
 

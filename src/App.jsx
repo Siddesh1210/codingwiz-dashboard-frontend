@@ -1,18 +1,17 @@
-import Login from './components/Login'
+import Login from './view/Login'
 import { createBrowserRouter, Outlet } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import SideBar from './components/SideBar';
-import Home from './components/Home';
-import Payment from './components/Payment';
-import Customer from './components/Customer';
-
-import ProtectedRoute from './components/ProtectedRoute';
-import PaymentLink from './components/PaymentLink';
-import Invoice from './components/Invoice';
-import Coupon from './components/Coupon';
-import Developer from './components/Developer';
-import Subscription from './components/Subscription';
-import Setting from './components/Setting';
+import Navbar from './view/Navbar';
+import SideBar from './view/SideBar';
+import Home from './view/Home';
+import Payment from './view/Payment';
+import Customer from './view/Customer';
+import ProtectedRoute from './view/ProtectedRoute';
+import PaymentLink from './view/PaymentLink';
+import Invoice from './view/Invoice';
+import Coupon from './view/Coupon';
+import Developer from './view/Developer';
+import Subscription from './view/Subscription';
+import Setting from './view/Setting';
 import AccountDetail from './components/Setting/AccountDetail';
 import BusinessDetail from './components/Setting/BusinessDetail';
 const App = () => {

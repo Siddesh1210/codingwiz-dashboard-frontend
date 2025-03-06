@@ -1,12 +1,11 @@
-import SubscriptionTopCard from "./Subscription/SubscriptionTopCard";
+import SubscriptionTopCard from "../components/Subscription/SubscriptionTopCard";
 import { useState, useEffect } from "react";
 import { useFetchDetail } from "../hooks/useFetchDetail";
-import PaymentHistory from "./Subscription/PaymentHistory";
+import PaymentHistory from "../components/Subscription/PaymentHistory";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAddDetail, useMakePayment } from "../hooks/useAddDetail";
-
 
 function Subscription() {
     const [subscriptionTopCardData, setSubscriptionTopCardData] = useState([]);
@@ -30,88 +29,127 @@ function Subscription() {
 
     const handleBuySubscription = async () => {
         if (!buySubscriptionData.tier.trim() || !buySubscriptionData.month) {
-            return toast.error("All input field is required!", {
-                position: 'top-center'
+            return toast.error("All input fields are required!", {
+                position: "top-center",
             });
         }
     
         setLoading2(true);
         try {
-          const response = await useAddDetail('api/v1/user/update-temp-subscription', {
-            ...buySubscriptionData,
-            month: Number(buySubscriptionData.month),
-            tier: Number(buySubscriptionData.tier),
-          })
-            console.log("Response is : ",response);
+            // Calculate total amount in INR
             let totalPay = 0;
             if (buySubscriptionData.tier == "1") {
-                totalPay = 39 * Number(buySubscriptionData.month)
-            }  else if (buySubscriptionData.tier == "2") {
-                totalPay = 149 * Number(buySubscriptionData.month)
+                totalPay = 39 * Number(buySubscriptionData.month);
+            } else if (buySubscriptionData.tier == "2") {
+                totalPay = 149 * Number(buySubscriptionData.month);
             }
-            proceedToBuySubscription(totalPay)
-            // setBuySubscriptionData({
-            //     tier: "1",
-            //     month: "1",
-            //     user_id: token,
-            //   });
-            // toast.success("Subscription Buyed Successfully!", {
-            //     position: "top-center",
-            //     autoClose: 2000 
-            // });
-            // setTimeout(()=>{
-            //     toast.info("Fetching New Coupon List", {
-            //         position: "top-center",
-            //         autoClose: 2000 
-            //     });
-            // }, 2000);
-            // setTimeout(()=>{
-            //     getSubscriptionTopCardData();
-            //     getPaymentHistoryData();
-            // }, 3000)
-          // Clear input
+    
+            // Convert amount to paise (multiply by 100)
+            const amountInPaise = totalPay * 100;
+    
+            // Create an order from backend
+            const response = await useAddDetail("api/v1/auth/order", {
+                amount: amountInPaise, // Sending amount in paise
+                currency: "INR",
+                receipt:  `order_${new Date().getTime()}`,
+            });
+    
+            const startDate = new Date(); // Get current date in UTC
+
+            // Create end date by adding months as days (approximate calculation)
+            let endDate = new Date();
+            endDate.setDate(startDate.getDate() + Number(buySubscriptionData.month) * 30);
+
+            // Convert both dates to IST manually
+            const convertToIST = (date) => {
+                let istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC + 5:30
+                return new Date(date.getTime() + istOffset);
+            };
+
+            const startDateIST = convertToIST(startDate);
+            const endDateIST = convertToIST(endDate);
+            // Razorpay payment options
+            var options = {
+                key: "rzp_test_e2SIN0SFihM4bx",
+                amount: amountInPaise, // Amount in paise
+                currency: "INR",
+                description: "Payment for Subscription on Codingwiz",
+                image: "https://codingwiz.vercel.app/static/media/cw_logo.54af4673e405b89da8fc.png",
+                prefill: {
+                    email: "codingwiz@support.com",
+                    contact: 9623235838,
+                },
+                order_id: response.data.id, // Order ID from backend
+                handler: async function (response) {
+                    // alert(response.razorpay_payment_id);
+                    // alert(response.razorpay_order_id);
+                    // alert(response.razorpay_signature);
+                    const validateorder = {
+                        ...response,
+                        razorpay_amount: amountInPaise/100,
+                        razorpay_payment_status: "completed",
+                        tier: buySubscriptionData.tier,
+                        startDate: startDateIST,
+                        endDate: endDateIST,
+                    }
+                    const result = await useAddDetail("api/v1/auth/validate-order", validateorder);
+                    toast.success("Buying Subscription Successful!", {
+                        position: "top-center",
+                        autoClose: 2000,
+                    });
+                    setTimeout(()=>{
+                        toast.info("Fetching updated data!", {
+                            position: "top-center",
+                            autoClose: 2000,
+                        });
+                    }, 2000)
+                    setTimeout(()=>{
+                        getSubscriptionTopCardData();
+                        getPaymentHistoryData();
+                    }, 3000)
+                },
+                modal: {
+                    escape: false, // Prevents escape key from closing modal
+                    ondismiss: async function () {
+                        const failedorder = {
+                            razorpay_order_id: response.data.id,
+                            razorpay_amount: amountInPaise/100,
+                            razorpay_payment_status: "failed",
+                            tier: buySubscriptionData.tier,
+                            startDate: startDateIST,
+                            endDate: endDateIST,
+                        }
+                        const result = await useAddDetail("api/v1/auth/failed-order", failedorder);
+                        toast.error("Buying Subscription Failed!", {
+                            position: "top-center",
+                            autoClose: 2000,
+                        });
+                        setTimeout(()=>{
+                            toast.info("Fetching updated data!", {
+                                position: "top-center",
+                                autoClose: 2000,
+                            });
+                        }, 2000)
+                        setTimeout(()=>{
+                            getSubscriptionTopCardData();
+                            getPaymentHistoryData();
+                        }, 3000)
+                    }
+                }
+            };
+    
+            var rzp1 = new window.Razorpay(options);
+            rzp1.open();
         } catch (error) {
-          toast.error("Buying Subscription Fail!", {
+            toast.error("Buying Subscription Failed!", {
                 position: "top-center",
-                autoClose: 4000 
+                autoClose: 4000,
             });
         } finally {
             setShowBuyModal(false);
             setLoading2(false);
         }
-      };
-
-      async function proceedToBuySubscription(totalAmount) {
-        try {
-            const paymentDetails = {
-                    amount: totalAmount, // Amount in USD
-                    blockchain: ["Ethereum", "Polygon", "Binance", "XDC-Network"],
-                    token: ["USDT", "USDC", "BUSD", "ETH", "DAI", "XDC", "Matic", "BNB"],
-                    title: "Resmic PRO Subscription",
-                    description: "Payment for Resmic PRO Subscription",
-                    wallet_address: "0x056397760b973BfB921Bc10Be9DA5034B1e921d7",
-                    blockchain_confirmation: 2,
-                    redirect_url:"https://dashboard.resmic.com/success",
-                    cancel_url: "https://dashboard.resmic.com/failed",
-                    webhook_url: `${import.meta.env.VITE_BACKEND_URL}/api/v1/makepayment/subscription/payment-status`,
-            }
-    
-            const response = await useMakePayment('api/v1/makepayment', paymentDetails, token);
-        } catch (error) {
-            toast.error(error || "Buying Subscription Fail!", {
-                  position: "top-center",
-                  autoClose: 4000 
-              });
-          } finally {
-              setShowBuyModal(false);
-              setLoading2(false);
-              setBuySubscriptionData({
-                    tier: "1",
-                    month: "1",
-                    user_id: token,
-                });
-          }
-      }
+    };
 
     useEffect(()=>{
         getSubscriptionTopCardData();
@@ -122,7 +160,6 @@ function Subscription() {
     async function getSubscriptionTopCardData() {
         try {
             const response = await useFetchDetail(`api/v1/user/plan-details?user_id=${token}`);
-            console.log(response[0]);
             // setSubscriptionTopCardData(response[0]);
             // Assuming response[0] contains the data
             const formattedData = {
@@ -144,7 +181,6 @@ function Subscription() {
 
     async function getPaymentHistoryData() {
             const response = await useFetchDetail(`api/v1/user/plan-details?user_id=${token}`);
-            console.log(response);
             setPaymentHistoryData(response);
     }
 

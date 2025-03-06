@@ -57,7 +57,6 @@ function CouponPage({ data = [] }) {
       }
   
       setFilteredData(filtered);
-      console.log("Filteres Data is : ", data);
       setCurrentPage(1); // Reset to the first page when filters change
     }, [statusFilter, searchQuery, data]);
   
@@ -101,7 +100,6 @@ function CouponPage({ data = [] }) {
     setLoading(true);
     try {
       const response = await useAddDetail('api/v1/coupon/create', couponData)
-        console.log("Response is : ",response);
         setCouponData({
             user_id: token,
             coupon_code: "",
@@ -145,7 +143,6 @@ function CouponPage({ data = [] }) {
             coupon_id: deleteCoupon,
         })
         
-        console.log("Response is : ",response);
         toast.success("API Key Deleted Successfully!", {
             position: "top-center",
             autoClose: 2000 
@@ -233,7 +230,7 @@ function CouponPage({ data = [] }) {
             {
               currentItems?.length !== 0 ? (
                 currentItems?.map((item) => (
-                  <tr key={item?.coupon_id} className="border-b">
+                  <tr key={item?.coupon_code} className="border-b">
                     <td className="px-4 py-2">{item?.coupon_code}</td>
                     <td className="px-4 py-2">{new Date(item?.start_date)?.toLocaleString()}</td>
                     <td className="px-4 py-2">{Number(item?.discount_type) == 0 ? "Fixed Amount" : "Percentage" }</td>

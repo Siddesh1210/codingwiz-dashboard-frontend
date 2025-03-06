@@ -1,4 +1,4 @@
-import resmicLogo from '../assets/images/resmic_logo.png';
+import codingwizLogo from '../assets/images/codingwiz_logo.png';
 import { useState, useRef } from "react";
 import { useAddDetail } from '../hooks/useAddDetail';
 import { ToastContainer, toast } from "react-toastify";
@@ -44,13 +44,15 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
                     email: userEmail,
                     otp: otp.join("")
             })
-            console.log("Response is : ", response);
             toast.success("OTP Verified Successfully!", {
                 position: "top-center",
-                autoClose: 4000 
+                autoClose: 2000 
             });
+            setOtp(["", "", "", "", "", ""]);
             dispatch(login(response?.data?.user_id));
-            navigate("/");
+            setTimeout(()=>{
+                navigate("/");
+            }, 1000);
         } catch (error) {
             toast.error(error || "Something went wrong!", {
                 position: "top-center",
@@ -64,6 +66,7 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
 
     async function resendOtp() {
         try {
+            setOtp(["", "", "", "", "", ""]);
             setShowDot(true);
             const response = await useAddDetail('api/v1/auth/resendotp', {
                     email: userEmail,
@@ -88,8 +91,8 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
             <div className="w-100 min-h-screen bg-secondary flex justify-center items-center">
                 <div className="md:w-[40%] w-[90%] flex flex-col justify-center text-center items-center">
                     <div className='flex justify-center items-center gap-4 my-4'>
-                        <img src={resmicLogo} alt="Resmic-Logo" width="60px" className="filter grayscale"/>
-                        <h1 className='text-4xl font-bold text-black'>Resmic Pro</h1>
+                        <img src={codingwizLogo} alt="codingwiz-Logo" width="60px" className="filter grayscale"/>
+                        <h1 className='text-4xl font-bold text-black'>codingwiz Pro</h1>
                     </div>
 
                     <div className="w-[90%] bg-white my-3 p-5 rounded-xl flex flex-col justify-center items-center">
@@ -124,7 +127,7 @@ function VerifyOtp({userEmail, makeOtpPageFalse}) {
                         </button>
                     </div>
 
-                    <p className='text-sm flex flex-wrap justify-center gap-1 items-center text-gray-500 my-3'> <i className="bi bi-c-circle"></i> Resmic 2025 <i className="bi bi-dot"></i> Contact <i className="bi bi-dot"></i> Privacy Policy <i className="bi bi-dot"></i> Terms of Conditions</p>
+                    <p className='text-sm flex flex-wrap justify-center gap-1 items-center text-gray-500 my-3'> <i className="bi bi-c-circle"></i> Codingwiz 2025 <i className="bi bi-dot"></i> Contact <i className="bi bi-dot"></i> Privacy Policy <i className="bi bi-dot"></i> Terms of Conditions</p>
                 </div>
             </div>
             <ToastContainer/>

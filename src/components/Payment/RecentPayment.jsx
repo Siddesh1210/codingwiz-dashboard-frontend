@@ -51,42 +51,33 @@ const RecentPayment = ({data}) => {
 
       <div className="overflow-x-auto rounded-md">
         <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
-          <thead>
+        <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Amount</th>
+              <th className="px-4 py-2">Order ID</th>
               <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Title</th>
-              <th className="px-4 py-2">Customer</th>
-              <th className="px-4 py-2">Method</th>
-              <th className="px-4 py-2">Action</th>
+              <th className="px-4 py-2">Amount</th>
+              <th className="px-4 py-2">Tier</th>
+              <th className="px-4 py-2">Date</th>
             </tr>
           </thead>
           <tbody>
-            {
-                currentItems?.length !== 0 ? (
-                    currentItems?.map((item) => (
-                        <tr key={item?.transaction_id} className="border-b">
-                          <td className="px-4 py-2">{new Date(item?.created_at)?.toLocaleString()}</td>
-                          <td className="px-4 py-2">$ {item?.amount}</td>
+            {currentItems.length ? (
+              currentItems.map((item) => (
+                <tr key={item?.order_id} className="border-b">
+                          <td className="px-4 py-2">{item?.order_id}</td>
                           <td className="px-4 py-2">{item?.status == 'completed' ? <span className="bg-green-200 text-green-500 px-2 rounded-sm">Paid</span> : <span className="bg-red-200 text-red-500 px-2 rounded-sm">Failed</span>}</td>
-                          <td className="px-4 py-2">{item?.title}</td>
-                          <td className="px-4 py-2">{item?.from_wallet_address
-                            ? `${item.from_wallet_address.slice(0, 6)}...${item.from_wallet_address.slice(-4)}`
-                            : ""}</td>
-                          <td className="px-4 py-2">{item?.blockchain}</td>
-                          <td className="px-4 py-2">{item?.action || '-'}</td>
-                        </tr>
-                      ))
-                ) : (
-                    <tr>
-                        <td colSpan={6} className="text-center py-2">
-                          No recent payments found.
-                        </td>
-                    </tr>
-                )
-            }
-            
+                          <td className="px-4 py-2">₹ {item?.amount}</td>
+                          <td className="px-4 py-2">{item?.tier}</td>
+                          <td className="px-4 py-2">{new Date(item?.createdAt)?.toLocaleString()}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={6} className="text-center py-2">
+                  No recent payments found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

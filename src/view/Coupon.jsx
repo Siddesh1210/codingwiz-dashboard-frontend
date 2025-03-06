@@ -1,6 +1,6 @@
-import CouponPage from "./Coupon/CouponPage";
+import CouponPage from "../components/Coupon/CouponPage.jsx";
 import { useState, useEffect } from "react";
-import { useFetchDetail } from "../hooks/useFetchDetail";
+import { useFetchDetail } from "../hooks/useFetchDetail.js";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

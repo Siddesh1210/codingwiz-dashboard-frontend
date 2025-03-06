@@ -1,4 +1,4 @@
-import DeveloperPage from "./Developer/DeveloperPage";
+import DeveloperPage from "../components/Developer/DeveloperPage";
 import { useState, useEffect } from "react";
 import { useFetchDetail } from "../hooks/useFetchDetail";
 import { useSelector } from "react-redux";

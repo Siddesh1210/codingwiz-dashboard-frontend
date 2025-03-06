@@ -38,7 +38,6 @@ function DeveloperPage({ apiData = [] }) {
   async function getallData() {
     const response = await useFetchDetail(`api/v1/api-key?user_id=${token}`);
     setAllData(response);
-    console.log("Response is : ", allData);
   }
 
   const handleGenerateKey = async () => {
@@ -76,7 +75,7 @@ function DeveloperPage({ apiData = [] }) {
       const response = await useDeleteDetail('api/v1/api-key', {
             user_id: token,
         })
-        console.log("Response is : ",response);
+        localStorage.removeItem('api_secret');
         toast.success("API Key Deleted Successfully!", {
             position: "top-center",
             autoClose: 2000 
@@ -108,11 +107,11 @@ function DeveloperPage({ apiData = [] }) {
       <div className="flex justify-between items-end flex-wrap mb-6">
         <h1 className="text-3xl font-bold">Personal Access Token</h1>
         <button onClick={() => setShowModal(true)} className="px-2 py-1 text-sm border border-gray-300 rounded-md cursor-pointer font-semibold">
-          <i className="bi bi-plus-lg"></i> Generate Key
+          <i className="bi bi-plus-lg"></i> {secretKey ? 'Copy Key' : 'Generate Key'}
         </button>
       </div>
 
-      <p className="text-sm">Tokens you have generated to access <span className="text-blue-500 cursor-pointer">Resmic API</span></p>
+      <p className="text-sm">Tokens you have generated to access <span className="text-blue-500 cursor-pointer">Codingwiz API</span></p>
 
       {
         allData?.api_key && (
@@ -120,7 +119,7 @@ function DeveloperPage({ apiData = [] }) {
                 <table className="min-w-full bg-white border-y-0 border-gray-200 text-sm text-center">
                 <thead>
                     <tr className="border-y-0 bg-gray-100">
-                    <th className="px-4 py-2">Name</th>
+                    <th className="px-4 py-2">Api Key</th>
                     <th className="px-4 py-2">Secret Key</th>
                     <th className="px-4 py-2">Tier</th>
                     <th className="px-4 py-2">Created On</th>
@@ -132,14 +131,14 @@ function DeveloperPage({ apiData = [] }) {
                 <tbody>
                     {allData ? (
                         <tr className="border-b">
-                        <td className="px-4 py-2">{allData?.user_id || "N/A"}</td>
+                        <td className="px-4 py-2">{allData?.api_key || "N/A"}</td>
                         <td className="px-4 py-2">{secretKey || "N/A"}</td>
                         <td className="px-4 py-2">{allData?.tier || "N/A"}</td>
                         <td className="px-4 py-2">{allData?.api_created_on ? new Date(allData.api_created_on).toLocaleString() : "N/A"}</td>
                         <td className="px-4 py-2">{allData?.isactive ? 'true' : 'false'}</td>
                         <td className="px-4 py-2">{allData?.api_expiry ? new Date(allData.api_expiry).toLocaleString() : "N/A"}</td>
                         <td className="px-4 py-2 text-center" onClick={() => setShowDeleteModal(true)}>
-                            <button className="text-blue-600 hover:text-blue-800">Delete</button>
+                            <button className="text-red-600">Delete</button>
                         </td>
                         </tr>
                     ) : (

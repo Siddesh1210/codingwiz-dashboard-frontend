@@ -77,8 +77,8 @@ export default function TransactionsChart({apiData}) {
                 {chartData.length > 0 ? (
                     <LineChart data={chartData}>
                     <XAxis dataKey="date" stroke="#4f2c71" />
-                    <YAxis stroke="#4f2c71" tickFormatter={(value) => `$${value}`} />
-                    <Tooltip formatter={(value) => `$${value}`} />
+                    <YAxis stroke="#4f2c71" tickFormatter={(value) => `₹${value}`} />
+                    <Tooltip formatter={(value) => `₹${value}`} />
                     <Legend />
                     <Line type="monotone" dataKey="total_volume" stroke="#4f2c71" strokeWidth={3} dot={{ r: 5 }} />
                     </LineChart>

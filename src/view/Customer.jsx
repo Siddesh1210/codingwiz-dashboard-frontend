@@ -1,4 +1,4 @@
-import CustomerList from "./Customer/CustomerList";
+import CustomerList from "../components/Customer/CustomerList";
 function Customer() {
 
     return(

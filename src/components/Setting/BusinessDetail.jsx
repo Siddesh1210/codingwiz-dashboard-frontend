@@ -34,15 +34,15 @@ function BusinessDetail() {
         try {
                 const response = await useUpdateDetail('api/v1/user/company', {
                     user_id: token,
-                    name: formData.businessName,
-                    address: formData.businessAddress, 
-                    email: formData.businessEmail,
-                    support_email: formData.supportEmail, 
-                    mobile: formData.supportMobile, 
-                    support_mobile: formData.supportMobile,
-                    company_identification_no: formData.companyIdentificationNumber,
+                    name: formData.businessName?.trim(),
+                    address: formData.businessAddress?.trim(), 
+                    email: formData.businessEmail?.trim(),
+                    support_email: formData.supportEmail?.trim(), 
+                    mobile: formData.supportMobile?.trim(), 
+                    support_mobile: formData.supportMobile?.trim(),
+                    company_identification_no: formData.companyIdentificationNumber?.trim(),
+                    website: formData.businessWebsite,
                 })
-                console.log("Response is : ", response);
                 toast.success("Business Detail Saved Successfully!", {
                     position: "top-center",
                     autoClose: 3000 
@@ -81,7 +81,6 @@ function BusinessDetail() {
 
     async function getBusinessDetail() {
         const response = await useFetchDetail(`api/v1/user/company?user_id=${token}`)
-        console.log("Business Detail: ", response);
 
         // Set the state with API data
         setFormData({
@@ -90,7 +89,7 @@ function BusinessDetail() {
             businessEmail: response.email,
             supportEmail: response.support_email,
             supportMobile: response.support_mobile,
-            businessWebsite: "",
+            businessWebsite: response.website,
             companyIdentificationNumber: response.company_identification_no
         });
     }
@@ -223,7 +222,7 @@ function BusinessDetail() {
                         value={formData.businessWebsite}
                         onChange={handleChange}
                         className="w-full border border-gray-300 px-4 py-3 rounded-md outline-none focus:border-primary" 
-                        placeholder="Eg: https://resmic.com"  
+                        placeholder="Eg: https://codingwiz.com"  
                         id="businessWebsite"
                     />
                 </div>
@@ -242,7 +241,7 @@ function BusinessDetail() {
                         value={formData.companyIdentificationNumber}
                         onChange={handleChange}
                         className="w-full border border-gray-300 px-4 py-3 rounded-md outline-none focus:border-primary" 
-                        placeholder="Eg: Resmic1290DK"  
+                        placeholder="Eg: codingwiz1290DK"  
                         id="companyIdentificationNumber"
                     />
                 </div>

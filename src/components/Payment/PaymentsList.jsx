@@ -21,7 +21,7 @@ const PaymentsList = () => {
         user_id: token,
         limit: 10,
         page,
-        ...(transactionId && { transaction_hash: transactionId }),
+        ...(transactionId && { order_id: transactionId }),
         ...(fromDate && { from_date: fromDate }),
         ...(toDate && { to_date: toDate }),
         ...(statusFilter && { status: statusFilter })
@@ -74,12 +74,12 @@ const PaymentsList = () => {
           <div className="relative">
             <input
               type="text"
-              placeholder="Search by Transaction ID"
+              placeholder="Search by Order ID"
               value={transactionId}
               onChange={handleSearchChange}
               className="px-4 py-2 border border-gray-300 rounded-md text-sm"
             />
-            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">Tnx ID</p>
+            <p className="absolute -top-3 left-1 bg-white px-2 text-primary">Order ID</p>
           </div>
           <div className="relative">
             <select
@@ -127,28 +127,22 @@ const PaymentsList = () => {
         <table className="min-w-full bg-white border border-gray-200 text-sm text-center">
           <thead>
             <tr className="border-b bg-gray-100">
-              <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Amount</th>
+              <th className="px-4 py-2">Order ID</th>
               <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">Customer</th>
-              <th className="px-4 py-2">Token</th>
-              <th className="px-4 py-2">Method</th>
-              <th className="px-4 py-2">Action</th>
+              <th className="px-4 py-2">Amount</th>
+              <th className="px-4 py-2">Tier</th>
+              <th className="px-4 py-2">Date</th>
             </tr>
           </thead>
           <tbody>
             {data.length ? (
               data.map((item) => (
-                <tr key={item?.transaction_id} className="border-b">
-                          <td className="px-4 py-2">{new Date(item?.created_at)?.toLocaleString()}</td>
-                          <td className="px-4 py-2">$ {item?.amount}</td>
+                <tr key={item?.order_id} className="border-b">
+                          <td className="px-4 py-2">{item?.order_id}</td>
                           <td className="px-4 py-2">{item?.status == 'completed' ? <span className="bg-green-200 text-green-500 px-2 rounded-sm">Paid</span> : <span className="bg-red-200 text-red-500 px-2 rounded-sm">Failed</span>}</td>
-                          <td className="px-4 py-2">{item?.from_wallet_address
-                            ? `${item.from_wallet_address.slice(0, 6)}...${item.from_wallet_address.slice(-4)}`
-                            : ""}</td>
-                          <td className="px-4 py-2">{item?.token}</td>
-                          <td className="px-4 py-2">{item?.blockchain}</td>
-                          <td className="px-4 py-2">{item?.action || '-'}</td>
+                          <td className="px-4 py-2">₹ {item?.amount}</td>
+                          <td className="px-4 py-2">{item?.tier}</td>
+                          <td className="px-4 py-2">{new Date(item?.createdAt)?.toLocaleString()}</td>
                 </tr>
               ))
             ) : (

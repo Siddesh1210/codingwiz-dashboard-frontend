@@ -11,7 +11,7 @@ export async function useAddDetail(endpoint, body) {
         });
         return response.data;
     } catch (error) {
-        throw (error?.message || 'Something went wrong');
+        throw (error?.response?.data?.message || error?.message || 'Something went wrong');
     } 
 }
 
@@ -34,6 +34,6 @@ export async function useMakePayment(endpoint, paymentDetails, userId) {
         }
     } catch (error) {
         console.error("Payment Error:", error);
-        throw (error?.message || 'Something went wrong');
+        throw (error?.response?.data?.message || error?.message || 'Something went wrong');
     }
 }

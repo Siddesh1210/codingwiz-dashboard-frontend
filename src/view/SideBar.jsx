@@ -36,7 +36,7 @@ function SideBar() {
                             <i className="bi bi-people mr-2"></i> Customer
                         </div>
                     </Link>
-                    <Link to="/payment-link" className="text-gray-800 cursor-pointer p-2 rounded w-full">
+                    {/* <Link to="/payment-link" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 ${
                                 location.pathname === "/payment-link" ? "bg-primary text-white" : "text-black"
@@ -54,7 +54,7 @@ function SideBar() {
                         >
                             <i className="bi bi-list-columns mr-2"></i> Invoice
                         </div>
-                    </Link>
+                    </Link> */}
 
                     <Link to="/coupon" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
@@ -96,7 +96,7 @@ function SideBar() {
                         </div>
                     </Link>
 
-                    <a href= "mailto:support@resmic.com" className="text-gray-800 cursor-pointer p-2 rounded w-full">
+                    <a href= "mailto:support@codingwiz.com" className="text-gray-800 cursor-pointer p-2 rounded w-full">
                         <div
                             className={`px-2 py-2 rounded-md mr-2 text-black`}
                         >

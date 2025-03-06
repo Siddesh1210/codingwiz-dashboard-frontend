@@ -9,6 +9,6 @@ export async function useUpdateDetail(endpoint, data) {
         });
         return response.data;
     } catch (error) {
-        throw (error?.response?.data?.message || "Something went wrong");
+        throw (error?.response?.data?.message || error?.message || "Something went wrong");
     }
 }

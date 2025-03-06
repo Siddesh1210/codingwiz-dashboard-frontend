@@ -1,4 +1,4 @@
-import SettingHome from "./Setting/SettingHome";
+import SettingHome from "../components/Setting/SettingHome";
 
 function Setting() {
     return(
