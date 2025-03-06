@@ -15,6 +15,15 @@ export async function useAddDetail(endpoint, body) {
     } 
 }
 
+export async function logoutUser() {
+    try {
+        await axios.post(`${BACKEND_URL}/logout`, {}, { withCredentials: true });
+        console.log("Logged out successfully");
+    } catch (error) {
+        console.error("Logout failed:", error?.response?.data?.message || error.message);
+    }
+}
+
 export async function useMakePayment(endpoint, paymentDetails, userId) {
     try {
         const response = await axios.post(`${BACKEND_URL}${endpoint}`, paymentDetails, {

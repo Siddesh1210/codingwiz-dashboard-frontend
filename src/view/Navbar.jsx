@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import codingwizLogo from '../assets/images/codingwiz_logo.png';
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { logoutUser } from "../hooks/useAddDetail";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +55,10 @@ function Navbar() {
           <Link onClick={() => setIsOpen(false)} to="/subscription" className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer ${ location.pathname === "/subscription" ? "bg-primary text-white" : "text-primary" }`}><i className="bi bi-bag-plus-fill"></i> &nbsp;Subscription</Link>
           <Link onClick={() => setIsOpen(false)} to="/setting" className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer ${ location.pathname === "/setting" || location.pathname === "/setting/account-detail" || location.pathname === "/support/business-detail" ? "bg-primary text-white" : "text-primary" }`}><i className="bi bi-gear"></i> &nbsp;Settings</Link>
           <a onClick={() => setIsOpen(false)} href= "mailto:support@codingwiz.com" className={`p-2 rounded text-xl cursor-pointer text-primary`}><i className="bi bi-headset"></i> &nbsp;Support</a>
-          <Link onClick={() => dispatch(logout())}  className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer text-primary`}><i className="bi bi-box-arrow-right"></i> &nbsp;Logout</Link>
+          <Link onClick={async () => {
+            dispatch(logout());
+            await logoutUser();
+          }}  className={`hover:bg-gray-200 p-2 rounded text-xl cursor-pointer text-primary`}><i className="bi bi-box-arrow-right"></i> &nbsp;Logout</Link>
         </ul>
       </div>
     </nav>

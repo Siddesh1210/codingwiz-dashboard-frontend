@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { logout } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
+import { logoutUser } from "../hooks/useAddDetail";
 function SideBar() {
     const location = useLocation();
     const dispatch = useDispatch();
@@ -104,7 +105,10 @@ function SideBar() {
                         </div>
                     </a>
 
-                    <Link className="text-gray-800 cursor-pointer p-2 rounded w-full" onClick={() => dispatch(logout())} >
+                    <Link className="text-gray-800 cursor-pointer p-2 rounded w-full" onClick={async () => {
+                        dispatch(logout());
+                        await logoutUser();
+                    }} >
                         <div
                             className={`px-2 py-2 rounded-md mr-2 text-black`}>
                             <i className="bi bi-box-arrow-right mr-2"></i> Logout
