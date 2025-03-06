@@ -17,7 +17,7 @@ export async function useAddDetail(endpoint, body) {
 
 export async function logoutUser() {
     try {
-        await axios.post(`${BACKEND_URL}/logout`, {}, { withCredentials: true });
+        await axios.post(`${BACKEND_URL}api/v1/auth/logout`, {}, { withCredentials: true });
         console.log("Logged out successfully");
     } catch (error) {
         console.error("Logout failed:", error?.response?.data?.message || error.message);
