@@ -13,7 +13,7 @@ function AccountDetail() {
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
-        email: "heydivyapawar@gmail.com", // Pre-filled and disabled
+        email: "useremail@gmail.com", // Pre-filled and disabled
     });
 
     // Handle input change
@@ -138,7 +138,7 @@ function AccountDetail() {
                         name="email" 
                         value={formData.email}
                         className="w-full border border-gray-300 px-4 py-3 text-gray-400 rounded-md outline-none focus:border-primary cursor-not-allowed" 
-                        placeholder="heydivyapawar@gmail.com" 
+                        placeholder="useremail@gmail.com" 
                         id="email" 
                         disabled
                     />
